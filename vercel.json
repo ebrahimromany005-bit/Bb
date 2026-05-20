@@ -2,7 +2,7 @@
   "version": 2,
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/scholar-guide exec vite build --config vite.vercel.config.ts",
-  "outputDirectory": "artifacts/scholar-guide/dist/public",
+  "outputDirectory": "dist/public",
   "framework": null,
   "crons": [
     {
