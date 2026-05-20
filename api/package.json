@@ -1,0 +1,15 @@
+{
+  "name": "@workspace/vercel-api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "express": "^5",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5",
+    "@types/node": "^22",
+    "@types/pg": "^8",
+    "@vercel/node": "^5"
+  }
+}
