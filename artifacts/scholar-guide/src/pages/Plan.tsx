@@ -87,7 +87,7 @@ export default function Plan() {
   const isValid = true;
   
 
-    async function generate(e) {
+    async function generate(e: React.FormEvent) {
       e.preventDefault();
       
     if (!isValid) {
@@ -183,12 +183,12 @@ const res = await fetch(`${apiBase}/plan`, {
   placeholder={isAr ? "ابحث عن الدولة..." : "Search country..."}
   onChange={(e) => {
     const val = e.target.value;
-    const found = (countries.data?.items ?? []).find(c => (isAr ? c.nameAr : c.name) === val);
+    const found = (countries.data ?? []).find((c: { code: string; name: string; nameAr: string }) => (isAr ? c.nameAr : c.name) === val);
     if (found) update("targetCountry", found.code);
   }}
 />
 <datalist id="countries-list">
-  {(countries.data?.items ?? []).map((c) => (
+  {(countries.data ?? []).map((c: { code: string; name: string; nameAr: string }) => (
     <option key={c.code} value={isAr ? c.nameAr : c.name} />
   ))}
 </datalist>
