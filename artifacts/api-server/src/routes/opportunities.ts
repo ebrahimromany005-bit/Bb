@@ -5,9 +5,15 @@ import {
   GetOpportunityParams,
   ListRecommendedOpportunitiesQueryParams,
 } from "@workspace/api-zod";
-import { and, asc, desc, eq, ilike, or, sql, gt } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, or, sql, gt, inArray } from "drizzle-orm";
 
 const router: IRouter = Router();
+
+const DEVELOPED_COUNTRY_CODES = [
+  'DE','FR','GB','IT','ES','PT','NL','BE','CH','AT','SE','NO','DK','FI','IS','IE','LU','GR',
+  'CZ','PL','HU','SK','SI','HR','EE','LV','LT','MT','CY','RO','BG',
+  'US','CA','AU','NZ','JP','KR','SG'
+];
 
 function normalizeArabic(s: string): string {
   return s
@@ -106,8 +112,8 @@ router.get("/opportunities/featured", async (_req, res) => {
   const items = await db
     .select()
     .from(opportunitiesTable)
-    .where(eq(opportunitiesTable.featured, true))
-    .orderBy(asc(opportunitiesTable.deadline))
+    .where(inArray(opportunitiesTable.countryCode, DEVELOPED_COUNTRY_CODES))
+    .orderBy(desc(opportunitiesTable.featured), asc(opportunitiesTable.deadline))
     .limit(12);
   res.json(items.map(serialize));
 });
@@ -126,7 +132,7 @@ router.get("/opportunities/recommended", async (req, res) => {
     const items = await db
       .select()
       .from(opportunitiesTable)
-      .where(or(...conds))
+      .where(and(inArray(opportunitiesTable.countryCode, DEVELOPED_COUNTRY_CODES), or(...conds)))
       .orderBy(desc(opportunitiesTable.featured), asc(opportunitiesTable.deadline))
       .limit(12);
     res.json(items.map(serialize));
@@ -136,6 +142,7 @@ router.get("/opportunities/recommended", async (req, res) => {
   const items = await db
     .select()
     .from(opportunitiesTable)
+    .where(inArray(opportunitiesTable.countryCode, DEVELOPED_COUNTRY_CODES))
     .orderBy(desc(opportunitiesTable.featured), desc(opportunitiesTable.acceptanceRate))
     .limit(12);
   res.json(items.map(serialize));

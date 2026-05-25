@@ -130,9 +130,19 @@ router.get("/opportunities", async (req, res) => {
   });
 });
 
+const DEVELOPED_COUNTRY_CODES = [
+  'DE','FR','GB','IT','ES','PT','NL','BE','CH','AT','SE','NO','DK','FI','IS','IE','LU','GR',
+  'CZ','PL','HU','SK','SI','HR','EE','LV','LT','MT','CY','RO','BG',
+  'US','CA','AU','NZ','JP','KR','SG'
+];
+const DEV_CODES_SQL = DEVELOPED_COUNTRY_CODES.map((_, i) => `$${i + 1}`).join(',');
+
 router.get("/opportunities/featured", async (_req, res) => {
   const { rows } = await pool.query(
-    `SELECT * FROM opportunities WHERE featured = true ORDER BY deadline ASC LIMIT 12`
+    `SELECT * FROM opportunities
+     WHERE country_code = ANY($1::text[])
+     ORDER BY featured DESC, deadline ASC LIMIT 12`,
+    [DEVELOPED_COUNTRY_CODES]
   );
   res.json(rows.map(serializeOpp));
 });
@@ -143,17 +153,23 @@ router.get("/opportunities/recommended", async (req, res) => {
     : [];
 
   if (interests.length > 0) {
-    const conds = interests.map((_, i) => `(field ILIKE $${i + 1} OR tags::text ILIKE $${i + 1})`).join(" OR ");
+    const paramOffset = DEVELOPED_COUNTRY_CODES.length + 1;
+    const conds = interests.map((_, i) => `(field ILIKE $${paramOffset + i} OR tags::text ILIKE $${paramOffset + i})`).join(" OR ");
     const { rows } = await pool.query(
-      `SELECT * FROM opportunities WHERE ${conds} ORDER BY featured DESC, deadline ASC LIMIT 12`,
-      interests.map((i) => `%${i}%`)
+      `SELECT * FROM opportunities
+       WHERE country_code = ANY($1::text[]) AND (${conds})
+       ORDER BY featured DESC, deadline ASC LIMIT 12`,
+      [DEVELOPED_COUNTRY_CODES, ...interests.map((i) => `%${i}%`)]
     );
     res.json(rows.map(serializeOpp));
     return;
   }
 
   const { rows } = await pool.query(
-    `SELECT * FROM opportunities ORDER BY featured DESC, acceptance_rate DESC NULLS LAST LIMIT 12`
+    `SELECT * FROM opportunities
+     WHERE country_code = ANY($1::text[])
+     ORDER BY featured DESC, acceptance_rate DESC NULLS LAST LIMIT 12`,
+    [DEVELOPED_COUNTRY_CODES]
   );
   res.json(rows.map(serializeOpp));
 });
