@@ -2,7 +2,7 @@
   "version": 2,
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/scholar-guide exec vite build",
-    "outputDirectory": "dist",
+    "outputDirectory": "dist/public",
   
   "framework": null,
   "crons": [
