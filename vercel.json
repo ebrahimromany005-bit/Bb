@@ -2,7 +2,7 @@
   "version": 2,
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm --filter @workspace/scholar-guide run vercel-build",
-    "outputDirectory": "dist/public",
+    "outputDirectory": "dist",
   
   "framework": null,
   "crons": [

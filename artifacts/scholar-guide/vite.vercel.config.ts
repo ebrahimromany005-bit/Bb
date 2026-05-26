@@ -15,5 +15,6 @@ export default defineConfig({
   build: {
     outDir: "dist/public",
     emptyOutDir: true,
+    sourcemap: false,
   },
 });
