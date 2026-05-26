@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "vite build",
+  "buildCommand": "pnpm --filter @workspace/scholar-guide exec vite build",
     "outputDirectory": "dist",
   
   "framework": null,
