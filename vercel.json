@@ -9,9 +9,10 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "src/index.ts"
-    }
+            "src": "/(.*)",
+      "dest": "src/index.ts",
+      "check": true
+      
   ],
    
   "crons": [
