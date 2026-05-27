@@ -8,9 +8,11 @@
       "use": "@vercel/node"
     }
   ],
-"rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ],
   "crons": [
     {
@@ -19,5 +21,6 @@
     }
   ]
 }
+
 
 
