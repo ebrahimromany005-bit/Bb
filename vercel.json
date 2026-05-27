@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "pnpm install --frozen-lockfile",
-    "builds": [
+  "builds": [
     {
       "src": "src/index.ts",
       "use": "@vercel/node"
@@ -9,12 +9,10 @@
   ],
   "routes": [
     {
-            "src": "/(.*)",
-      "dest": "src/index.ts",
-      "check": true
-      
+      "src": "/(.*)",
+      "dest": "src/index.ts"
+    }
   ],
-   
   "crons": [
     {
       "path": "/api/cron/renew-scholarships",
@@ -22,3 +20,4 @@
     }
   ]
 }
+
