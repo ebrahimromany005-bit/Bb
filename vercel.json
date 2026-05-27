@@ -13,8 +13,7 @@
       "dest": "src/index.ts"
     }
   ],
-  
-  
+   
   "crons": [
     {
       "path": "/api/cron/renew-scholarships",
