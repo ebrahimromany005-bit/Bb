@@ -7,7 +7,7 @@
     "build": "true",
     "build:vercel": "pnpm --filter @workspace/scholar-guide exec vite build --config vite.vercel.config.ts",
     "typecheck:libs": "tsc --build",
-    "typecheck": "true",
+    "typecheck": "true"
   },
   "private": true,
   "devDependencies": {
