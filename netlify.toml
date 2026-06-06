@@ -1,0 +1,5 @@
+[build]
+  base = ""
+  command = "pnpm --filter @workspace/scholar-guide run build"
+  publish = "artifacts/scholar-guide/dist"
+  
