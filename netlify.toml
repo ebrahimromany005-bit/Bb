@@ -1,5 +1,4 @@
 [build]
-  base = ""
-  command = "cd packages/scholar-guide && npx prisma generate && cd ../.. && pnpm --filter @workspace/scholar-guide run build"
+  command = "pnpm --filter @workspace/scholar-guide run build"
   publish = "artifacts/scholar-guide/dist/public"
   
