@@ -1,5 +1,5 @@
 [build]
   base = ""
-  command = "pnpx prisma generate --schema=./packages/scholar-guide/prisma/schema.prisma && pnpm --filter @workspace/scholar-guide run build"
+  command = "npx prisma generate && pnpm --filter @workspace/scholar-guide run build"
   publish = "artifacts/scholar-guide/dist/public"
   
