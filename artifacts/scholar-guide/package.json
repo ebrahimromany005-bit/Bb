@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.ts --host 0.0.0.0",
-    "build": "vite build --config vite.config.ts",
-    "vercel-build": "vite build --config vite.vercel.config.ts",
+    "dev": "vite --config 
+    vite.config.ts --host 0.0.0.0",
+config vite.vercel.config.ts",
+        "build": "npx prisma generate && vite build --config vite.config.ts",
+    "vercel-build": "npx prisma generate && vite build --config vite.vercel.config.ts",
+    
     "serve": "vite preview --config vite.config.ts --host 0.0.0.0",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
