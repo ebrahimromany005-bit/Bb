@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
-          "build": "npx prisma generate && pnpm --filter @workspace/scholar-guide run build",
-      "build:vercel": "npx prisma generate && pnpm --filter @workspace/scholar-guide exec vite build --config vite.vercel.config.ts",
+          "build": "pnpm install --no-frozen-lockfile && npx prisma generate && pnpm --filter @workspace/scholar-guide run build",
+      "build:vercel": "pnpm install --no-frozen-lockfile && npx prisma generate && pnpm --filter @workspace/scholar-guide exec vite build --config vite.vercel.config.ts",
     "typecheck:libs": "tsc --build",
     "typecheck": "true"
   },
