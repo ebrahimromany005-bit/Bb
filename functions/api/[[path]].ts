@@ -1,32 +1,52 @@
 /**
  * Cloudflare Pages Function — handles all /api/* routes.
- * Uses @neondatabase/serverless (HTTP/WebSocket) instead of pg (TCP),
- * which is the only PostgreSQL driver compatible with Cloudflare Workers.
+ * Uses Neon's HTTP SQL API via native fetch — zero external dependencies.
+ * POST https://<neon-host>/sql
+ *   Authorization: Bearer <password>
+ *   Content-Type: application/json
+ *   Body: { "query": "...", "params": [...] }
  */
-import { neon } from "@neondatabase/serverless";
 
 type Env = {
   DATABASE_URL: string;
 };
 
 type Row = Record<string, unknown>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SqlFn = any;
 
-// Helper: always returns rows array regardless of neon's union return type
-async function query(
-  sql: SqlFn,
+// ---------- Neon HTTP SQL helper ----------
+
+interface NeonResult {
+  rows: Row[];
+  fields: { name: string; dataTypeID: number }[];
+}
+
+async function neonQuery(
+  databaseUrl: string,
   text: string,
-  params?: unknown[]
+  params: unknown[] = []
 ): Promise<Row[]> {
-  const result = await sql.query(text, params ?? []);
-  if (result && typeof result === "object" && Array.isArray(result.rows)) {
-    return result.rows as Row[];
+  // Parse connection string: postgres://user:password@host/dbname
+  const url = new URL(databaseUrl);
+  const host = url.hostname;
+  const password = decodeURIComponent(url.password);
+
+  const res = await fetch(`https://${host}/sql`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${password}`,
+      "Neon-Connection-String": databaseUrl,
+    },
+    body: JSON.stringify({ query: text, params }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Neon HTTP error ${res.status}: ${errText}`);
   }
-  if (Array.isArray(result)) {
-    return result as Row[];
-  }
-  return [];
+
+  const data = (await res.json()) as NeonResult;
+  return data.rows ?? [];
 }
 
 // ---------- helpers ----------
@@ -79,10 +99,7 @@ function serializeOpp(o: Row) {
     acceptanceRate: o.acceptance_rate ?? undefined,
     featured: o.featured,
     affiliateUrl: o.affiliate_url ?? undefined,
-    createdAt:
-      o.created_at instanceof Date
-        ? o.created_at.toISOString()
-        : String(o.created_at),
+    createdAt: o.created_at ? String(o.created_at) : "",
   };
 }
 
@@ -93,17 +110,16 @@ const DEVELOPED_COUNTRY_CODES = [
   "US", "CA", "AU", "NZ", "JP", "KR", "SG",
 ];
 
+// Build a $1,$2,... placeholder list for an IN clause
+function placeholders(arr: unknown[], startIdx = 1): string {
+  return arr.map((_, i) => `$${startIdx + i}`).join(",");
+}
+
 // ---------- route handlers ----------
 
-async function handleOpportunities(
-  sql: SqlFn,
-  url: URL
-): Promise<Response> {
+async function handleOpportunities(db: string, url: URL): Promise<Response> {
   const page = Number(url.searchParams.get("page") || "1");
-  const pageSize = Math.min(
-    Number(url.searchParams.get("pageSize") || "20"),
-    100
-  );
+  const pageSize = Math.min(Number(url.searchParams.get("pageSize") || "20"), 100);
   const offset = (page - 1) * pageSize;
 
   const conditions: string[] = [];
@@ -160,27 +176,17 @@ async function handleOpportunities(
     values.push(featured === "true");
   }
 
-  const where =
-    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+  const where = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 
   const sort = url.searchParams.get("sort");
   let orderBy = "ORDER BY featured DESC";
   if (sort === "deadline") orderBy = "ORDER BY deadline ASC";
   else if (sort === "newest") orderBy = "ORDER BY created_at DESC";
-  else if (sort === "popular")
-    orderBy = "ORDER BY acceptance_rate DESC NULLS LAST";
+  else if (sort === "popular") orderBy = "ORDER BY acceptance_rate DESC NULLS LAST";
 
   const [items, countRows] = await Promise.all([
-    query(
-      sql,
-      `SELECT * FROM opportunities ${where} ${orderBy} LIMIT $${idx} OFFSET $${idx + 1}`,
-      [...values, pageSize, offset]
-    ),
-    query(
-      sql,
-      `SELECT count(*)::int AS total FROM opportunities ${where}`,
-      values
-    ),
+    neonQuery(db, `SELECT * FROM opportunities ${where} ${orderBy} LIMIT $${idx} OFFSET $${idx + 1}`, [...values, pageSize, offset]),
+    neonQuery(db, `SELECT count(*)::int AS total FROM opportunities ${where}`, values),
   ]);
 
   return json({
@@ -191,86 +197,65 @@ async function handleOpportunities(
   });
 }
 
-async function handleFeatured(sql: SqlFn): Promise<Response> {
-  const rows = await query(
-    sql,
-    `SELECT * FROM opportunities
-     WHERE country_code = ANY($1::text[])
-     ORDER BY featured DESC, deadline ASC LIMIT 12`,
-    [DEVELOPED_COUNTRY_CODES]
+async function handleFeatured(db: string): Promise<Response> {
+  const ph = placeholders(DEVELOPED_COUNTRY_CODES);
+  const rows = await neonQuery(
+    db,
+    `SELECT * FROM opportunities WHERE country_code IN (${ph}) ORDER BY featured DESC, deadline ASC LIMIT 12`,
+    DEVELOPED_COUNTRY_CODES
   );
   return json(rows.map(serializeOpp));
 }
 
-async function handleRecommended(
-  sql: SqlFn,
-  url: URL
-): Promise<Response> {
+async function handleRecommended(db: string, url: URL): Promise<Response> {
   const interestsRaw = url.searchParams.get("interests");
   const interests = interestsRaw
-    ? interestsRaw
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
+    ? interestsRaw.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
 
+  const countryPh = placeholders(DEVELOPED_COUNTRY_CODES); // $1..$N
+
   if (interests.length > 0) {
-    const paramOffset = DEVELOPED_COUNTRY_CODES.length + 1;
+    const base = DEVELOPED_COUNTRY_CODES.length + 1;
     const conds = interests
-      .map(
-        (_, i) =>
-          `(field ILIKE $${paramOffset + i} OR tags::text ILIKE $${paramOffset + i})`
-      )
+      .map((_, i) => `(field ILIKE $${base + i} OR tags::text ILIKE $${base + i})`)
       .join(" OR ");
-    const rows = await query(
-      sql,
-      `SELECT * FROM opportunities
-       WHERE country_code = ANY($1::text[]) AND (${conds})
-       ORDER BY featured DESC, deadline ASC LIMIT 12`,
-      [DEVELOPED_COUNTRY_CODES, ...interests.map((i) => `%${i}%`)]
+    const rows = await neonQuery(
+      db,
+      `SELECT * FROM opportunities WHERE country_code IN (${countryPh}) AND (${conds}) ORDER BY featured DESC, deadline ASC LIMIT 12`,
+      [...DEVELOPED_COUNTRY_CODES, ...interests.map((i) => `%${i}%`)]
     );
     return json(rows.map(serializeOpp));
   }
 
-  const rows = await query(
-    sql,
-    `SELECT * FROM opportunities
-     WHERE country_code = ANY($1::text[])
-     ORDER BY featured DESC, acceptance_rate DESC NULLS LAST LIMIT 12`,
-    [DEVELOPED_COUNTRY_CODES]
+  const rows = await neonQuery(
+    db,
+    `SELECT * FROM opportunities WHERE country_code IN (${countryPh}) ORDER BY featured DESC, acceptance_rate DESC NULLS LAST LIMIT 12`,
+    DEVELOPED_COUNTRY_CODES
   );
   return json(rows.map(serializeOpp));
 }
 
-async function handleDeadlines(
-  sql: SqlFn
-): Promise<Response> {
+async function handleDeadlines(db: string): Promise<Response> {
   const today = new Date().toISOString().slice(0, 10);
-  const rows = await query(
-    sql,
+  const rows = await neonQuery(
+    db,
     `SELECT * FROM opportunities WHERE deadline > $1 ORDER BY deadline ASC LIMIT 20`,
     [today]
   );
   return json(rows.map(serializeOpp));
 }
 
-async function handleOpportunityById(
-  sql: SqlFn,
-  id: number
-): Promise<Response> {
+async function handleOpportunityById(db: string, id: number): Promise<Response> {
   if (isNaN(id)) return json({ error: "Invalid id" }, 400);
-  const rows = await query(sql, `SELECT * FROM opportunities WHERE id = $1`, [
-    id,
-  ]);
+  const rows = await neonQuery(db, `SELECT * FROM opportunities WHERE id = $1`, [id]);
   if (!rows[0]) return json({ error: "Not found" }, 404);
   return json(serializeOpp(rows[0]));
 }
 
-async function handleCountries(
-  sql: SqlFn
-): Promise<Response> {
-  const rows = await query(
-    sql,
+async function handleCountries(db: string): Promise<Response> {
+  const rows = await neonQuery(
+    db,
     `SELECT c.code, c.name, c.name_ar, c.flag, c.region, c.latitude, c.longitude,
       count(o.id)::int AS opportunity_count,
       count(o.id) FILTER (WHERE o.type = 'scholarship')::int AS scholarship_count,
@@ -296,17 +281,10 @@ async function handleCountries(
   );
 }
 
-async function handleCountryByCode(
-  sql: SqlFn,
-  code: string
-): Promise<Response> {
+async function handleCountryByCode(db: string, code: string): Promise<Response> {
   const [cRows, oRows] = await Promise.all([
-    query(sql, `SELECT * FROM countries WHERE code = $1`, [
-      code.toUpperCase(),
-    ]),
-    query(sql, `SELECT * FROM opportunities WHERE country_code = $1`, [
-      code.toUpperCase(),
-    ]),
+    neonQuery(db, `SELECT * FROM countries WHERE code = $1`, [code.toUpperCase()]),
+    neonQuery(db, `SELECT * FROM opportunities WHERE country_code = $1`, [code.toUpperCase()]),
   ]);
   if (!cRows[0]) return json({ error: "Not found" }, 404);
   const c = cRows[0];
@@ -324,26 +302,17 @@ async function handleCountryByCode(
   });
 }
 
-async function handleStatsOverview(
-  sql: SqlFn
-): Promise<Response> {
+async function handleStatsOverview(db: string): Promise<Response> {
   const today = new Date().toISOString().slice(0, 10);
   const [counts, countryCount, deadlines] = await Promise.all([
-    query(
-      sql,
-      `SELECT
-        count(*)::int AS total_opportunities,
-        count(*) FILTER (WHERE type = 'scholarship')::int AS total_scholarships,
-        count(*) FILTER (WHERE type = 'migration')::int AS total_migration,
-        count(*) FILTER (WHERE featured = true)::int AS featured_count
-      FROM opportunities`
-    ),
-    query(sql, `SELECT count(*)::int AS country_count FROM countries`),
-    query(
-      sql,
-      `SELECT count(*)::int AS deadlines FROM opportunities WHERE deadline > $1`,
-      [today]
-    ),
+    neonQuery(db, `SELECT
+      count(*)::int AS total_opportunities,
+      count(*) FILTER (WHERE type = 'scholarship')::int AS total_scholarships,
+      count(*) FILTER (WHERE type = 'migration')::int AS total_migration,
+      count(*) FILTER (WHERE featured = true)::int AS featured_count
+    FROM opportunities`),
+    neonQuery(db, `SELECT count(*)::int AS country_count FROM countries`),
+    neonQuery(db, `SELECT count(*)::int AS deadlines FROM opportunities WHERE deadline > $1`, [today]),
   ]);
   const c = counts[0] ?? {};
   return json({
@@ -356,21 +325,17 @@ async function handleStatsOverview(
   });
 }
 
-async function handleStatsByType(
-  sql: SqlFn
-): Promise<Response> {
-  const rows = await query(
-    sql,
+async function handleStatsByType(db: string): Promise<Response> {
+  const rows = await neonQuery(
+    db,
     `SELECT type, count(*)::int AS count FROM opportunities GROUP BY type`
   );
   return json(rows.map((r) => ({ type: r.type, count: Number(r.count) })));
 }
 
-async function handleStatsTopCountries(
-  sql: SqlFn
-): Promise<Response> {
-  const rows = await query(
-    sql,
+async function handleStatsTopCountries(db: string): Promise<Response> {
+  const rows = await neonQuery(
+    db,
     `SELECT c.code, c.name, c.name_ar, c.flag, count(o.id)::int AS count
     FROM countries c
     LEFT JOIN opportunities o ON o.country_code = c.code
@@ -389,14 +354,11 @@ async function handleStatsTopCountries(
   );
 }
 
-async function handleGetApplications(
-  sql: SqlFn,
-  url: URL
-): Promise<Response> {
+async function handleGetApplications(db: string, url: URL): Promise<Response> {
   const userId = url.searchParams.get("userId") ?? "";
   if (!userId) return json({ error: "userId required" }, 400);
-  const rows = await query(
-    sql,
+  const rows = await neonQuery(
+    db,
     `SELECT a.id, a.user_id, a.opportunity_id, a.status, a.notes, a.created_at, a.updated_at,
       o.title AS opportunity_title, o.title_ar AS opportunity_title_ar,
       o.country_code, o.country_name, o.country_name_ar, o.type, o.deadline
@@ -420,37 +382,24 @@ async function handleGetApplications(
       status: r.status,
       notes: r.notes ?? undefined,
       deadline: r.deadline,
-      createdAt:
-        r.created_at instanceof Date
-          ? r.created_at.toISOString()
-          : String(r.created_at),
-      updatedAt:
-        r.updated_at instanceof Date
-          ? r.updated_at.toISOString()
-          : String(r.updated_at),
+      createdAt: r.created_at ? String(r.created_at) : "",
+      updatedAt: r.updated_at ? String(r.updated_at) : "",
     }))
   );
 }
 
-async function handleCreateApplication(
-  sql: SqlFn,
-  body: Record<string, unknown>
-): Promise<Response> {
+async function handleCreateApplication(db: string, body: Record<string, unknown>): Promise<Response> {
   const { userId, opportunityId, status = "planning", notes } = body;
   if (!userId || !opportunityId)
     return json({ error: "userId and opportunityId required" }, 400);
-  const rows = await query(
-    sql,
+  const rows = await neonQuery(
+    db,
     `INSERT INTO applications (user_id, opportunity_id, status, notes) VALUES ($1,$2,$3,$4) RETURNING *`,
     [userId, opportunityId, status, notes ?? null]
   );
   const created = rows[0];
   if (!created) return json({ error: "Failed to create" }, 500);
-  const opps = await query(
-    sql,
-    `SELECT * FROM opportunities WHERE id = $1`,
-    [created.opportunity_id]
-  );
+  const opps = await neonQuery(db, `SELECT * FROM opportunities WHERE id = $1`, [created.opportunity_id]);
   const opp = opps[0] ?? {};
   return json(
     {
@@ -466,50 +415,30 @@ async function handleCreateApplication(
       status: created.status,
       notes: created.notes ?? undefined,
       deadline: opp.deadline,
-      createdAt:
-        created.created_at instanceof Date
-          ? created.created_at.toISOString()
-          : String(created.created_at),
-      updatedAt:
-        created.updated_at instanceof Date
-          ? created.updated_at.toISOString()
-          : String(created.updated_at),
+      createdAt: created.created_at ? String(created.created_at) : "",
+      updatedAt: created.updated_at ? String(created.updated_at) : "",
     },
     201
   );
 }
 
-async function handlePatchApplication(
-  sql: SqlFn,
-  id: number,
-  body: Record<string, unknown>
-): Promise<Response> {
+async function handlePatchApplication(db: string, id: number, body: Record<string, unknown>): Promise<Response> {
   if (isNaN(id)) return json({ error: "Invalid id" }, 400);
   const { status, notes } = body;
   const sets: string[] = ["updated_at = NOW()"];
   const vals: unknown[] = [];
   let idx = 1;
-  if (status !== undefined) {
-    sets.push(`status = $${idx++}`);
-    vals.push(status);
-  }
-  if (notes !== undefined) {
-    sets.push(`notes = $${idx++}`);
-    vals.push(notes);
-  }
+  if (status !== undefined) { sets.push(`status = $${idx++}`); vals.push(status); }
+  if (notes !== undefined) { sets.push(`notes = $${idx++}`); vals.push(notes); }
   vals.push(id);
-  const rows = await query(
-    sql,
+  const rows = await neonQuery(
+    db,
     `UPDATE applications SET ${sets.join(", ")} WHERE id = $${idx} RETURNING *`,
     vals
   );
   if (!rows[0]) return json({ error: "Not found" }, 404);
   const updated = rows[0];
-  const opps = await query(
-    sql,
-    `SELECT * FROM opportunities WHERE id = $1`,
-    [updated.opportunity_id]
-  );
+  const opps = await neonQuery(db, `SELECT * FROM opportunities WHERE id = $1`, [updated.opportunity_id]);
   const opp = opps[0] ?? {};
   return json({
     id: updated.id,
@@ -524,42 +453,27 @@ async function handlePatchApplication(
     status: updated.status,
     notes: updated.notes ?? undefined,
     deadline: opp.deadline,
-    createdAt:
-      updated.created_at instanceof Date
-        ? updated.created_at.toISOString()
-        : String(updated.created_at),
-    updatedAt:
-      updated.updated_at instanceof Date
-        ? updated.updated_at.toISOString()
-        : String(updated.updated_at),
+    createdAt: updated.created_at ? String(updated.created_at) : "",
+    updatedAt: updated.updated_at ? String(updated.updated_at) : "",
   });
 }
 
-async function handleDeleteApplication(
-  sql: SqlFn,
-  id: number
-): Promise<Response> {
+async function handleDeleteApplication(db: string, id: number): Promise<Response> {
   if (isNaN(id)) return json({ error: "Invalid id" }, 400);
-  await query(sql, `DELETE FROM applications WHERE id = $1`, [id]);
+  await neonQuery(db, `DELETE FROM applications WHERE id = $1`, [id]);
   return new Response(null, { status: 204, headers: CORS_HEADERS });
 }
 
-async function handleAdTrack(
-  sql: SqlFn,
-  body: Record<string, unknown>
-): Promise<Response> {
+async function handleAdTrack(db: string, body: Record<string, unknown>): Promise<Response> {
   const { slot, event } = body;
   if (!slot || !event) return json({ error: "slot and event required" }, 400);
-  await query(sql, `INSERT INTO ad_events (slot, event) VALUES ($1, $2)`, [
-    slot,
-    event,
-  ]);
+  await neonQuery(db, `INSERT INTO ad_events (slot, event) VALUES ($1, $2)`, [slot, event]);
   return json({ ok: true });
 }
 
-async function handleAdStats(sql: SqlFn): Promise<Response> {
-  const rows = await query(
-    sql,
+async function handleAdStats(db: string): Promise<Response> {
+  const rows = await neonQuery(
+    db,
     `SELECT slot,
       count(*) FILTER (WHERE event = 'impression')::int AS impressions,
       count(*) FILTER (WHERE event = 'click')::int AS clicks
@@ -588,120 +502,94 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     return json({ error: "DATABASE_URL is not configured" }, 500);
   }
 
-  const sql = neon(env.DATABASE_URL);
+  const db = env.DATABASE_URL;
   const url = new URL(request.url);
-
-  // Strip /api prefix to get the path segment
   const rawPath = url.pathname.replace(/^\/api/, "") || "/";
   const method = request.method.toUpperCase();
 
   try {
-    // GET /api/healthz
     if (rawPath === "/healthz" && method === "GET") {
       return json({ status: "ok" });
     }
 
-    // GET /api/opportunities/featured
     if (rawPath === "/opportunities/featured" && method === "GET") {
-      return handleFeatured(sql);
+      return handleFeatured(db);
     }
 
-    // GET /api/opportunities/recommended
     if (rawPath === "/opportunities/recommended" && method === "GET") {
-      return handleRecommended(sql, url);
+      return handleRecommended(db, url);
     }
 
-    // GET /api/opportunities/deadlines
     if (rawPath === "/opportunities/deadlines" && method === "GET") {
-      return handleDeadlines(sql);
+      return handleDeadlines(db);
     }
 
-    // GET /api/opportunities/:id
     const oppByIdMatch = rawPath.match(/^\/opportunities\/(\d+)$/);
     if (oppByIdMatch && method === "GET") {
-      return handleOpportunityById(sql, Number(oppByIdMatch[1]));
+      return handleOpportunityById(db, Number(oppByIdMatch[1]));
     }
 
-    // GET /api/opportunities
     if (rawPath === "/opportunities" && method === "GET") {
-      return handleOpportunities(sql, url);
+      return handleOpportunities(db, url);
     }
 
-    // GET /api/countries
     if (rawPath === "/countries" && method === "GET") {
-      return handleCountries(sql);
+      return handleCountries(db);
     }
 
-    // GET /api/countries/:code
     const countryByCodeMatch = rawPath.match(/^\/countries\/([A-Za-z]{2,3})$/);
     if (countryByCodeMatch && method === "GET") {
-      return handleCountryByCode(sql, countryByCodeMatch[1]);
+      return handleCountryByCode(db, countryByCodeMatch[1]);
     }
 
-    // GET /api/stats/overview
     if (rawPath === "/stats/overview" && method === "GET") {
-      return handleStatsOverview(sql);
+      return handleStatsOverview(db);
     }
 
-    // GET /api/stats/by-type
     if (rawPath === "/stats/by-type" && method === "GET") {
-      return handleStatsByType(sql);
+      return handleStatsByType(db);
     }
 
-    // GET /api/stats/top-countries
     if (rawPath === "/stats/top-countries" && method === "GET") {
-      return handleStatsTopCountries(sql);
+      return handleStatsTopCountries(db);
     }
 
-    // GET /api/applications
     if (rawPath === "/applications" && method === "GET") {
-      return handleGetApplications(sql, url);
+      return handleGetApplications(db, url);
     }
 
-    // POST /api/applications
     if (rawPath === "/applications" && method === "POST") {
       const body = (await request.json()) as Record<string, unknown>;
-      return handleCreateApplication(sql, body);
+      return handleCreateApplication(db, body);
     }
 
-    // PATCH /api/applications/:id
     const patchAppMatch = rawPath.match(/^\/applications\/(\d+)$/);
     if (patchAppMatch && method === "PATCH") {
       const body = (await request.json()) as Record<string, unknown>;
-      return handlePatchApplication(sql, Number(patchAppMatch[1]), body);
+      return handlePatchApplication(db, Number(patchAppMatch[1]), body);
     }
 
-    // DELETE /api/applications/:id
     const deleteAppMatch = rawPath.match(/^\/applications\/(\d+)$/);
     if (deleteAppMatch && method === "DELETE") {
-      return handleDeleteApplication(sql, Number(deleteAppMatch[1]));
+      return handleDeleteApplication(db, Number(deleteAppMatch[1]));
     }
 
-    // POST /api/ads/track
     if (rawPath === "/ads/track" && method === "POST") {
       const body = (await request.json()) as Record<string, unknown>;
-      return handleAdTrack(sql, body);
+      return handleAdTrack(db, body);
     }
 
-    // GET /api/ads/stats
     if (rawPath === "/ads/stats" && method === "GET") {
-      return handleAdStats(sql);
+      return handleAdStats(db);
     }
 
-    // OpenAI routes — not supported on CF Pages
     if (rawPath.startsWith("/openai")) {
-      return json(
-        { error: "AI features are not available on this deployment" },
-        501
-      );
+      return json({ error: "AI features are not available on this deployment" }, 501);
     }
 
     return json({ error: "Not found" }, 404);
   } catch (err) {
     console.error("API error:", err);
-    return json(
-      { error: "Internal server error" },
-      500
-    );
+    return json({ error: "Internal server error" }, 500);
   }
 };
