@@ -26,23 +26,42 @@ async function neonQuery(
   params: unknown[] = []
 ): Promise<Row[]> {
   // Parse connection string: postgres://user:password@host/dbname
-  const url = new URL(databaseUrl);
-  const host = url.hostname;
-  const password = decodeURIComponent(url.password);
+  // Support both postgres:// and postgresql:// schemes
+  const normalized = databaseUrl.replace(/^postgresql:\/\//, "postgres://");
+  const connUrl = new URL(normalized);
+  const host = connUrl.hostname;
+  const password = decodeURIComponent(connUrl.password);
 
-  const res = await fetch(`https://${host}/sql`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${password}`,
-      "Neon-Connection-String": databaseUrl,
-    },
-    body: JSON.stringify({ query: text, params }),
-  });
+  if (!host || !password) {
+    throw new Error(`Invalid DATABASE_URL — could not extract host/password (host="${host}")`);
+  }
+
+  // 10-second timeout to avoid CF 522 on hung connections
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
+
+  let res: Response;
+  try {
+    res = await fetch(`https://${host}/sql`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${password}`,
+        "Neon-Connection-String": databaseUrl,
+      },
+      body: JSON.stringify({ query: text, params }),
+      signal: controller.signal,
+    });
+  } catch (fetchErr: unknown) {
+    const msg = fetchErr instanceof Error ? fetchErr.message : String(fetchErr);
+    throw new Error(`Neon fetch failed (host=${host}): ${msg}`);
+  } finally {
+    clearTimeout(timer);
+  }
 
   if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Neon HTTP error ${res.status}: ${errText}`);
+    const errText = await res.text().catch(() => "(unreadable)");
+    throw new Error(`Neon HTTP ${res.status} from ${host}: ${errText}`);
   }
 
   const data = (await res.json()) as NeonResult;
