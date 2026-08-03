@@ -1,0 +1,5 @@
+name = "scholar-guide"
+pages_build_output_dir = "artifacts/scholar-guide/dist/public"
+
+[build]
+command = "pnpm install --no-frozen-lockfile && pnpm --filter @workspace/scholar-guide run build"
