@@ -10,7 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta name="google-site-verification" content="5rCcBi1vqMQQ3Ofh_b53zxjBXvvnxGs33WIU5k2e-Sc" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8941980570893828" crossorigin="anonymous"></script>
+    <script defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8941980570893828" crossorigin="anonymous"></script>
+    
     <script>
       (function () {
         var observer = new MutationObserver(function (mutations) {
@@ -36,11 +37,33 @@
   </head>
   <body>
     <div id="root">
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: system-ui, sans-serif; background-color: #0d1b2a; color: #ffffff;">
-    <h1 style="font-size: 1.8rem; margin-bottom: 12px;">دليل المنح والهجرة العالمي</h1>
-    <p style="font-size: 1.1rem; opacity: 0.8;">جاري تحميل الفرص والمنح... 🚀</p>
+  <style>
+    @keyframes skeleton-blink { 50% { opacity: 0.5; } }
+    .sk-header { height: 60px; background: #1b2a3a; margin-bottom: 20px; width: 100%; }
+    .sk-card { background: #162432; padding: 20px; border-radius: 12px; margin: 15px auto; max-width: 800px; border: 1px solid rgba(255,255,255,0.05); }
+    .sk-title { height: 22px; background: #26384a; border-radius: 6px; width: 50%; margin-bottom: 15px; }
+    .sk-line { height: 14px; background: #26384a; border-radius: 4px; width: 90%; margin-bottom: 10px; }
+    .sk-line-sm { height: 14px; background: #26384a; border-radius: 4px; width: 60%; margin-bottom: 15px; }
+    .sk-btn { height: 36px; background: #2a3e52; border-radius: 8px; width: 110px; }
+    .sk-pulse { animation: skeleton-blink 1.4s infinite ease-in-out; }
+  </style>
+  <div style="min-height: 100vh; background-color: #0d1b2a; direction: rtl; padding-bottom: 20px;">
+    <div class="sk-header sk-pulse"></div>
+    <div class="sk-card sk-pulse">
+      <div class="sk-title"></div>
+      <div class="sk-line"></div>
+      <div class="sk-line-sm"></div>
+      <div class="sk-btn"></div>
+    </div>
+    <div class="sk-card sk-pulse">
+      <div class="sk-title"></div>
+      <div class="sk-line"></div>
+      <div class="sk-line-sm"></div>
+      <div class="sk-btn"></div>
+    </div>
   </div>
     </div>
+    
     
     <script type="module" src="/src/main.tsx"></script>
   </body>
