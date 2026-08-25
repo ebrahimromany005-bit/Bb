@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { usePremium } from '@/hooks/usePremium';
-import { useTrackAdEvent } from '@workspace/api-client-react';
 
 interface AdSlotProps {
   slot: string;
@@ -10,22 +9,25 @@ interface AdSlotProps {
 
 export function AdSlot({ slot, size = 'banner', className = '' }: AdSlotProps) {
   const { isPremium } = usePremium();
-  const trackAd = useTrackAdEvent();
   const trackedImpression = useRef(false);
 
   useEffect(() => {
     if (!isPremium && !trackedImpression.current) {
-      trackAd.mutate({ data: { slot, event: 'impression' } });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/ads/track', JSON.stringify({ slot, event: 'impression' }));
+      }
       trackedImpression.current = true;
     }
-  }, [isPremium, slot, trackAd]);
+  }, [isPremium, slot]);
 
   if (isPremium) {
     return null;
   }
 
   const handleAdClick = () => {
-    trackAd.mutate({ data: { slot, event: 'click' } });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/ads/track', JSON.stringify({ slot, event: 'click' }));
+    }
   };
 
   const sizeClasses = {
@@ -40,6 +42,8 @@ export function AdSlot({ slot, size = 'banner', className = '' }: AdSlotProps) {
       className={`flex items-center justify-center border-2 border-dashed border-border/60 bg-muted/30 rounded-xl my-6 mx-auto cursor-pointer hover:bg-muted/50 transition-colors ${sizeClasses[size]} ${className}`}
       onClick={handleAdClick}
       title="إعلان"
+      role="complementary"
+      aria-label="مساحة إعلانية"
     >
       <div className="text-center p-4">
         <p className="text-sm font-medium text-muted-foreground">مساحة إعلانية</p>

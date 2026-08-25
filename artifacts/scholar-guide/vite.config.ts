@@ -37,6 +37,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    minify: "esbuild",
+    cssMinify: true,
+    cssCodeSplit: true,
+    target: "es2020",
+    chunkSizeWarningLimit: 650,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          router: ["wouter"],
+          ui: ["lucide-react"],
+        },
+      },
+    },
   },
   server: {
     port,

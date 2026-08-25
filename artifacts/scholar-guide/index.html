@@ -8,8 +8,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Tajawal:wght@300;400;500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Tajawal:wght@300;400;500;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"></noscript>
     
     <meta name="google-site-verification" content="5rCcBi1vqMQQ3Ofh_b53zxjBXvvnxGs33WIU5k2e-Sc" />
     
@@ -18,6 +18,7 @@
     
     <script>
       (function () {
+        function startReplitCleanup() {
         var observer = new MutationObserver(function (mutations) {
           mutations.forEach(function (mutation) {
             mutation.addedNodes.forEach(function (node) {
@@ -36,6 +37,12 @@
           });
         });
         observer.observe(document.documentElement, { childList: true, subtree: true });
+        }
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(startReplitCleanup);
+        } else {
+          window.addEventListener("load", startReplitCleanup, { once: true });
+        }
       })();
     </script>
   </head>
