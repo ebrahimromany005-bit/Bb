@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { usePremium } from '@/hooks/usePremium';
 
 interface AdSlotProps {
@@ -9,26 +8,10 @@ interface AdSlotProps {
 
 export function AdSlot({ slot, size = 'banner', className = '' }: AdSlotProps) {
   const { isPremium } = usePremium();
-  const trackedImpression = useRef(false);
-
-  useEffect(() => {
-    if (!isPremium && !trackedImpression.current) {
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon('/api/ads/track', JSON.stringify({ slot, event: 'impression' }));
-      }
-      trackedImpression.current = true;
-    }
-  }, [isPremium, slot]);
 
   if (isPremium) {
     return null;
   }
-
-  const handleAdClick = () => {
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/ads/track', JSON.stringify({ slot, event: 'click' }));
-    }
-  };
 
   const sizeClasses = {
     banner: 'h-24 md:h-32 w-full max-w-4xl',
@@ -40,7 +23,6 @@ export function AdSlot({ slot, size = 'banner', className = '' }: AdSlotProps) {
   return (
     <div 
       className={`flex items-center justify-center border-2 border-dashed border-border/60 bg-muted/30 rounded-xl my-6 mx-auto cursor-pointer hover:bg-muted/50 transition-colors ${sizeClasses[size]} ${className}`}
-      onClick={handleAdClick}
       title="إعلان"
       role="complementary"
       aria-label="مساحة إعلانية"
