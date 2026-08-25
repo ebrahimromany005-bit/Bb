@@ -1,13 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
-import {
-  useGetStatsOverview,
-  useListFeaturedOpportunities,
-  useListRecommendedOpportunities,
-  useGetTopCountries,
-  useListUpcomingDeadlines,
-  useListCountries,
-} from "@workspace/api-client-react";
+import { localCountries, opportunities as localOpportunities } from "@/data/opportunities";
 import { useLang } from "@/lib/i18n";
 import { AdSlot } from "@/components/AdSlot";
 import { OpportunityCard } from "@/components/OpportunityCard";
@@ -30,12 +23,12 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const [query, setQuery] = useState("");
 
-  const stats = useGetStatsOverview();
-  const featured = useListFeaturedOpportunities();
-  const recommended = useListRecommendedOpportunities({});
-  const topCountries = useGetTopCountries();
-  const deadlines = useListUpcomingDeadlines();
-  const countries = useListCountries();
+  const stats = { data: { totalOpportunities: localOpportunities.length, totalScholarships: localOpportunities.filter((o) => o.type === "scholarship").length, totalMigration: localOpportunities.filter((o) => o.type === "migration").length, totalCountries: localCountries.length } };
+  const featured = { data: localOpportunities.filter((o) => o.featured) };
+  const recommended = { data: localOpportunities.slice(0, 8) };
+  const topCountries = { data: localCountries.map((c) => ({ countryCode: c.code, countryName: c.name, countryNameAr: c.nameAr, flag: c.flag, count: c.opportunityCount })) };
+  const deadlines = { data: localOpportunities.slice().sort((a, b) => a.deadline.localeCompare(b.deadline)) };
+  const countries = { data: localCountries };
 
   const flagFor = (code: string) =>
     countries.data?.find((c) => c.code === code)?.flag;

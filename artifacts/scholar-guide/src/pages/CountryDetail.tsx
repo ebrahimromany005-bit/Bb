@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "wouter";
-import { useGetCountry } from "@workspace/api-client-react";
 import { useLang } from "@/lib/i18n";
+import { getLocalCountry } from "@/data/opportunities";
 import { OpportunityCard } from "@/components/OpportunityCard";
 import { AdSlot } from "@/components/AdSlot";
 import { Card } from "@/components/ui/card";
@@ -24,7 +24,7 @@ export default function CountryDetail() {
   const isAr = lang === "ar";
   const [tab, setTab] = useState<"all" | "scholarship" | "migration">("all");
 
-  const country = useGetCountry(code);
+  const country = { data: getLocalCountry(code), isLoading: false };
 
   const filtered = useMemo(() => {
     if (!country.data) return [];

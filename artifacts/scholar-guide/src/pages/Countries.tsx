@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { useMemo, useState } from "react";
-import { useListCountries } from "@workspace/api-client-react";
 import { useLang } from "@/lib/i18n";
+import { localCountries } from "@/data/opportunities";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -37,7 +37,7 @@ function heatColor(count: number, max: number): string {
 
 export default function Countries() {
   const { lang } = useLang();
-  const countries = useListCountries();
+  const countries = { data: localCountries };
   const [search, setSearch] = useState("");
 
   const grouped = useMemo(() => {

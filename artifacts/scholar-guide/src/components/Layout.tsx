@@ -198,6 +198,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link href="/blog" className="hover:text-primary transition-colors">{t('blog')}</Link>
               <Link href="/about" className="hover:text-primary transition-colors">{t('about')}</Link>
               <Link href="/contact" className="hover:text-primary transition-colors">{lang === 'ar' ? 'اتصل بنا' : 'Contact'}</Link>
+              <Link href="/privacy-policy" className="hover:text-primary transition-colors">{lang === 'ar' ? 'الخصوصية' : 'Privacy'}</Link>
+              <Link href="/terms-of-service" className="hover:text-primary transition-colors">{lang === 'ar' ? 'الشروط' : 'Terms'}</Link>
             </nav>
           </div>
         </div>

@@ -1,11 +1,7 @@
 import { useParams, Link } from "wouter";
-import {
-  useGetOpportunity,
-  useListRecommendedOpportunities,
-  useListCountries,
-  useCreateApplication,
-  getListApplicationsQueryKey,
-} from "@workspace/api-client-react";
+import { useEffect } from "react";
+import { useCreateApplication, getListApplicationsQueryKey } from "@workspace/api-client-react";
+import { getLocalOpportunity, localCountries, opportunities as localOpportunities } from "@/data/opportunities";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLang } from "@/lib/i18n";
 import { useGuestUserId } from "@/hooks/useGuestUserId";
@@ -35,9 +31,10 @@ export default function OpportunityDetail() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const opp = useGetOpportunity(id);
-  const countries = useListCountries();
-  const related = useListRecommendedOpportunities({ interests: opp.data?.field });
+  const local = getLocalOpportunity(id);
+  const opp = { data: local, isLoading: false };
+  const countries = { data: localCountries };
+  const related = { data: localOpportunities.filter((item) => item.field === local?.field) };
 
   const createApp = useCreateApplication();
 
@@ -55,10 +52,32 @@ export default function OpportunityDetail() {
   const country = lang === "ar" ? o.countryNameAr : o.countryName;
   const days = Math.ceil((new Date(o.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 
-  const isFakeUrl = (url?: string) => !url || /example\.com|partner\.example/i.test(url);
-  const applyHref = isFakeUrl(o.applicationUrl)
-    ? `https://www.google.com/search?q=${encodeURIComponent(`${o.title} ${o.organization} official application`)}`
-    : o.applicationUrl;
+  const applyHref = o.applicationUrl;
+
+  useEffect(() => {
+    document.title = `${title} | Global Scholar Guide`;
+    const description = document.querySelector('meta[name="description"]') ?? document.createElement("meta");
+    description.setAttribute("name", "description");
+    description.setAttribute("content", o.overview[lang].slice(0, 155));
+    document.head.appendChild(description);
+    const scriptId = "opportunity-schema";
+    document.getElementById(scriptId)?.remove();
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: title,
+      description: o.overview[lang],
+      inLanguage: lang,
+      dateModified: new Date().toISOString().slice(0, 10),
+      publisher: { "@type": "Organization", name: "Global Scholar Guide", url: "https://globalscholarguide.online" },
+      mainEntityOfPage: `https://globalscholarguide.online/opportunities/${o.id}`,
+    });
+    document.head.appendChild(script);
+    return () => document.getElementById(scriptId)?.remove();
+  }, [lang, o, title]);
 
   const onTrack = () => {
     createApp.mutate(
@@ -136,24 +155,21 @@ export default function OpportunityDetail() {
               {o.duration && <Badge variant="outline">{o.duration}</Badge>}
             </div>
 
-            <p className="text-base leading-relaxed text-muted-foreground">{o.description}</p>
+              <p className="text-base leading-relaxed text-muted-foreground">{o.overview[lang]}</p>
           </Card>
 
-          {o.eligibility && (
-            <Card className="p-6">
+          <Card className="p-6">
               <h2 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <Target className="h-5 w-5 text-primary" />
                 {t("eligibility")}
               </h2>
-              <p className="text-muted-foreground leading-relaxed">{o.eligibility}</p>
-            </Card>
-          )}
+              <ul className="space-y-2 text-muted-foreground">{o.eligibilityCriteria[lang].map((item) => <li key={item} className="flex gap-2"><CheckCircle2 className="h-5 w-5 text-primary shrink-0" />{item}</li>)}</ul>
+          </Card>
 
-          {o.benefits.length > 0 && (
             <Card className="p-6">
-              <h2 className="font-bold text-lg mb-3">{t("benefits")}</h2>
+              <h2 className="font-bold text-lg mb-3">{lang === "ar" ? "التمويل والمزايا المقدمة" : "Financial Benefits"}</h2>
               <ul className="space-y-2">
-                {o.benefits.map((b, i) => (
+                {o.financialBenefits[lang].map((b, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <span>{b}</span>
@@ -161,13 +177,11 @@ export default function OpportunityDetail() {
                 ))}
               </ul>
             </Card>
-          )}
 
-          {o.requirements.length > 0 && (
             <Card className="p-6">
-              <h2 className="font-bold text-lg mb-3">{t("requirements")}</h2>
+              <h2 className="font-bold text-lg mb-3">{lang === "ar" ? "المستندات المطلوبة" : "Required Documents"}</h2>
               <ul className="space-y-2">
-                {o.requirements.map((r, i) => (
+                {o.requiredDocuments[lang].map((r, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="bg-secondary/15 text-secondary rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0">{i + 1}</span>
                     <span>{r}</span>
@@ -175,7 +189,6 @@ export default function OpportunityDetail() {
                 ))}
               </ul>
             </Card>
-          )}
 
           <AdSlot slot="detail_inpage" size="inline" />
 
@@ -186,11 +199,7 @@ export default function OpportunityDetail() {
                 {lang === "ar" ? "كيف تقدم على هذه الفرصة" : "How to apply"}
               </h3>
             </div>
-            <p className="text-sm text-muted-foreground mb-3">
-              {lang === "ar"
-                ? "اضغط زر «قدم الآن» في الشريط الجانبي للوصول إلى صفحة التقديم الرسمية، أو احفظ الفرصة في طلباتك لمتابعتها لاحقاً."
-                : "Use the Apply Now button in the sidebar to reach the official application page, or save it to your tracker to follow up later."}
-            </p>
+             <ol className="space-y-2 text-sm text-muted-foreground">{o.applicationSteps[lang].map((step, i) => <li key={step} className="flex gap-2"><span className="bg-primary/15 text-primary rounded-full w-6 h-6 flex items-center justify-center shrink-0 font-bold">{i + 1}</span>{step}</li>)}</ol>
             <p className="text-xs text-muted-foreground">
               {lang === "ar"
                 ? "💡 نصيحة: تأكد من قراءة شروط الأهلية والمستندات المطلوبة قبل التقديم."
@@ -239,12 +248,12 @@ export default function OpportunityDetail() {
             )}
 
             <div className="space-y-2">
-              <Button asChild className="w-full gap-2" size="lg">
+              {applyHref ? <Button asChild className="w-full gap-2" size="lg">
                 <a href={applyHref} target="_blank" rel="noopener noreferrer">
                   {t("apply_now")}
                   <ArrowUpRight className="h-4 w-4" />
                 </a>
-              </Button>
+              </Button> : <p className="text-xs text-muted-foreground text-center">{lang === "ar" ? "رابط التقديم الرسمي غير متاح حالياً." : "The official application link is currently unavailable."}</p>}
               <Button onClick={onTrack} variant="outline" className="w-full gap-2">
                 <BookmarkPlus className="h-4 w-4" />
                 {t("track_application")}

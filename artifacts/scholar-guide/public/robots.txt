@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /applications
+Disallow: /profile
+Disallow: /assistant
+Sitemap: https://globalscholarguide.online/sitemap.xml

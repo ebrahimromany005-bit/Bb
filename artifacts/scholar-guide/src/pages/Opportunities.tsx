@@ -1,11 +1,7 @@
 import { useState, useMemo, Fragment } from "react";
 import { Link, useLocation } from "wouter";
-import {
-  useListOpportunities,
-  useListCountries,
-  useListFeaturedOpportunities,
-} from "@workspace/api-client-react";
 import { useLang } from "@/lib/i18n";
+import { localCountries, opportunities as localOpportunities } from "@/data/opportunities";
 import { AdSlot } from "@/components/AdSlot";
 import { OpportunityCard } from "@/components/OpportunityCard";
 import { Card } from "@/components/ui/card";
@@ -50,22 +46,26 @@ export default function Opportunities() {
   const [showFilters, setShowFilters] = useState(false);
   const pageSize = 18;
 
-  const params: Record<string, unknown> = { page, pageSize, sort };
-  if (q.trim()) params["q"] = q.trim();
-  if (type !== "all") params["type"] = type;
-  if (countryCode !== "all") params["countryCode"] = countryCode;
-  if (degreeLevel !== "all") params["degreeLevel"] = degreeLevel;
-  if (funding !== "all") params["funding"] = funding;
-
-  const list = useListOpportunities(params);
-  const countries = useListCountries();
-  const featured = useListFeaturedOpportunities();
+  const countries = { data: localCountries };
+  const filteredAll = useMemo(() => localOpportunities.filter((item) => {
+    const text = `${item.title} ${item.titleAr} ${item.organization} ${item.field} ${item.countryName} ${item.countryNameAr}`.toLowerCase();
+    return (!q.trim() || text.includes(q.trim().toLowerCase())) &&
+      (type === "all" || item.type === type) &&
+      (countryCode === "all" || item.countryCode === countryCode) &&
+      (degreeLevel === "all" || item.degreeLevel === degreeLevel) &&
+      (funding === "all" || item.funding === funding);
+  }).sort((a, b) => {
+    if (sort === "newest") return b.id - a.id;
+    if (sort === "popular") return b.acceptanceRate - a.acceptanceRate;
+    return a.deadline.localeCompare(b.deadline);
+  }), [q, type, countryCode, degreeLevel, funding, sort]);
+  const items = filteredAll.slice((page - 1) * pageSize, page * pageSize);
+  const list = { data: { total: filteredAll.length }, isLoading: false };
+  const featured = { data: localOpportunities.filter((item) => item.featured) };
   const flagFor = (code: string) =>
     countries.data?.find((c) => c.code === code)?.flag;
 
-  const totalPages = list.data ? Math.ceil(list.data.total / pageSize) : 0;
-
-  const items = list.data?.items ?? [];
+  const totalPages = Math.ceil(list.data.total / pageSize);
 
   const groups: Array<typeof items> = [];
   for (let i = 0; i < items.length; i += 6) {
@@ -85,7 +85,7 @@ export default function Opportunities() {
 
   const filteredCountries = useMemo(() => {
     const cs = countrySearch.trim().toLowerCase();
-    const all = countries.data ?? [];
+    const all = countries.data;
     if (!cs) return all;
     return all.filter(
       (c) =>
@@ -96,13 +96,13 @@ export default function Opportunities() {
   }, [countries.data, countrySearch]);
 
   const featuredFiltered = useMemo(() => {
-    const all = featured.data ?? [];
+    const all = featured.data;
     if (type === "all") return all.slice(0, 6);
     return all.filter((f) => f.type === type).slice(0, 6);
   }, [featured.data, type]);
 
   const suggestedCountries = useMemo(() => {
-    const all = countries.data ?? [];
+    const all = countries.data;
     return all
       .slice()
       .filter((c) => {
@@ -130,11 +130,9 @@ export default function Opportunities() {
           ? "استكشف الفرص"
           : "Explore Opportunities";
 
-  const headerSubtitle = list.data
-    ? lang === "ar"
-      ? `${list.data.total.toLocaleString("ar-EG")} نتيجة متاحة`
-      : `${list.data.total.toLocaleString("en-US")} results available`
-    : "";
+  const headerSubtitle = lang === "ar"
+    ? `${list.data.total.toLocaleString("ar-EG")} نتيجة متاحة`
+    : `${list.data.total.toLocaleString("en-US")} results available`;
 
   const TabButton = ({
     value,
@@ -417,15 +415,7 @@ export default function Opportunities() {
         </section>
       )}
 
-      {list.isLoading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <Card key={i} className="h-64 animate-pulse bg-muted" />
-          ))}
-        </div>
-      )}
-
-      {!list.isLoading && items.length === 0 && (
+      {items.length === 0 && (
         <Card className="p-16 text-center">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-xl font-bold mb-2">
