@@ -9,13 +9,13 @@ export default function Contact() {
   const isAr = lang === 'ar';
 
   const faqs = isAr ? [
-    { q: 'كيف أتواصل معكم؟', a: 'أرسل بريداً إلكترونياً على contact@scholar-guide.app وسنرد خلال 48 ساعة.' },
+    { q: 'كيف أتواصل معكم؟', a: 'أرسل بريداً إلكترونياً على romanye75@gmail.com وسنرد خلال 48 ساعة.' },
     { q: 'كيف أُبلّغ عن خطأ في فرصة دراسية؟', a: 'أرسل لنا البريد الإلكتروني مع تفاصيل الفرصة والخطأ الذي وجدته وسنتحقق منه فوراً.' },
     { q: 'هل يمكنني إضافة منحة أو برنامج هجرة غير موجود؟', a: 'نعم، راسلنا ببيانات المنحة (الاسم، الرابط، الدولة، التفاصيل) وسنضيفها خلال أسبوع.' },
     { q: 'كيف يمكنني الإعلان على المنصة؟', a: 'تواصل معنا عبر البريد الإلكتروني للحصول على تفاصيل خيارات الإعلان المتاحة.' },
     { q: 'هل المنصة مجانية للاستخدام؟', a: 'نعم، المنصة مجانية الاستخدام. توجد نسخة مدفوعة تُزيل الإعلانات وتُضيف مميزات متقدمة.' },
   ] : [
-    { q: 'How can I contact you?', a: 'Send an email to contact@scholar-guide.app and we will respond within 48 hours.' },
+    { q: 'How can I contact you?', a: 'Send an email to romanye75@gmail.com and we will respond within 48 hours.' },
     { q: 'How do I report an error in an opportunity?', a: 'Email us with the opportunity details and the error you found, and we will verify it immediately.' },
     { q: 'Can I add a scholarship or migration program not listed?', a: 'Yes, email us the program details (name, link, country, details) and we will add it within a week.' },
     { q: 'How can I advertise on the platform?', a: 'Contact us via email to get details on available advertising options.' },
@@ -57,10 +57,10 @@ export default function Contact() {
                     : 'For general inquiries, partnerships, and technical support'}
                 </p>
                 <a
-                  href="mailto:contact@scholar-guide.app"
+                  href="mailto:romanye75@gmail.com"
                   className="text-primary font-bold text-lg hover:underline"
                 >
-                  contact@scholar-guide.app
+                  romanye75@gmail.com
                 </a>
               </div>
             </div>
