@@ -90,7 +90,7 @@ export default function About() {
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
                   <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-primary font-medium">contact@scholar-guide.app</span>
+                  <span className="text-primary font-medium">romanye75@gmail.com</span>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground">
