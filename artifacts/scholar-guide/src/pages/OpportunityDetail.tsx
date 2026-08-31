@@ -231,21 +231,7 @@ export default function OpportunityDetail() {
                     : "Closed"}
               </div>
             </div>
-
-            {o.acceptanceRate !== undefined && (
-              <div className="mb-4 pb-4 border-b">
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-                  <span>{lang === "ar" ? "نسبة القبول التقديرية" : "Acceptance Rate"}</span>
-                  <span className="font-bold">{o.acceptanceRate}%</span>
-                </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-primary to-accent"
-                    style={{ width: `${Math.min(100, o.acceptanceRate)}%` }}
-                  />
-                </div>
-              </div>
-            )}
+            
 
             <div className="space-y-2">
               {applyHref ? <Button asChild className="w-full gap-2" size="lg">
