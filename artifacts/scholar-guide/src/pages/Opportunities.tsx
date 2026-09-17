@@ -56,7 +56,10 @@ export default function Opportunities() {
       (funding === "all" || item.funding === funding);
   }).sort((a, b) => {
     if (sort === "newest") return b.id - a.id;
-    if (sort === "popular") return b.acceptanceRate - a.acceptanceRate;
+    if (sort === "featured") return Number(b.featured) - Number(a.featured);
+    if (!a.deadline && !b.deadline) return 0;
+    if (!a.deadline) return 1;
+    if (!b.deadline) return -1;
     return a.deadline.localeCompare(b.deadline);
   }), [q, type, countryCode, degreeLevel, funding, sort]);
   const items = filteredAll.slice((page - 1) * pageSize, page * pageSize);
@@ -292,7 +295,7 @@ export default function Opportunities() {
               <SelectContent>
                 <SelectItem value="deadline">{lang === "ar" ? "حسب الموعد النهائي" : "By deadline"}</SelectItem>
                 <SelectItem value="newest">{lang === "ar" ? "الأحدث" : "Newest"}</SelectItem>
-                <SelectItem value="popular">{lang === "ar" ? "الأكثر شعبية" : "Popular"}</SelectItem>
+                <SelectItem value="featured">{lang === "ar" ? "الفرص المميزة" : "Featured"}</SelectItem>
               </SelectContent>
             </Select>
           </div>

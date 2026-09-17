@@ -1,0 +1,1 @@
+- [Workspace dependency sync](workspace-dependency-sync.md) — filtered frozen installs restore declared workspace packages when shared node_modules is incomplete.

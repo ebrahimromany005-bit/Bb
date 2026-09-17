@@ -27,7 +27,12 @@ export default function Home() {
   const featured = { data: localOpportunities.filter((o) => o.featured) };
   const recommended = { data: localOpportunities.slice(0, 8) };
   const topCountries = { data: localCountries.map((c) => ({ countryCode: c.code, countryName: c.name, countryNameAr: c.nameAr, flag: c.flag, count: c.opportunityCount })) };
-  const deadlines = { data: localOpportunities.slice().sort((a, b) => a.deadline.localeCompare(b.deadline)) };
+  const deadlines = {
+    data: localOpportunities
+      .filter((opportunity) => opportunity.deadline !== null)
+      .slice()
+      .sort((a, b) => a.deadline!.localeCompare(b.deadline!)),
+  };
   const countries = { data: localCountries };
 
   const flagFor = (code: string) =>
@@ -192,32 +197,40 @@ export default function Home() {
             <Calendar className="h-7 w-7 text-accent" />
             {t("upcoming_deadlines")}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {deadlines.data?.slice(0, 8).map((opp) => {
-              const days = Math.ceil(
-                (new Date(opp.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-              );
-              return (
-                <Link key={opp.id} href={`/opportunities/${opp.id}`}>
-                  <Card className="p-4 flex items-center gap-4 hover-elevate cursor-pointer">
-                    <span className="text-4xl">{flagFor(opp.countryCode) ?? "🌍"}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">
-                        {lang === "ar" ? opp.titleAr : opp.title}
+          {deadlines.data.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {deadlines.data.slice(0, 8).map((opp) => {
+                const days = Math.ceil(
+                  (new Date(opp.deadline!).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+                );
+                return (
+                  <Link key={opp.id} href={`/opportunities/${opp.id}`}>
+                    <Card className="p-4 flex items-center gap-4 hover-elevate cursor-pointer">
+                      <span className="text-4xl">{flagFor(opp.countryCode) ?? "🌍"}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">
+                          {lang === "ar" ? opp.titleAr : opp.title}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {lang === "ar" ? opp.countryNameAr : opp.countryName} · {opp.organization}
+                        </div>
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {lang === "ar" ? opp.countryNameAr : opp.countryName} · {opp.organization}
+                      <div className={`text-center px-3 py-1.5 rounded-lg ${days < 30 ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}>
+                        <div className="font-bold text-lg leading-none">{days}</div>
+                        <div className="text-[10px]">{lang === "ar" ? "يوم" : "days"}</div>
                       </div>
-                    </div>
-                    <div className={`text-center px-3 py-1.5 rounded-lg ${days < 30 ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}>
-                      <div className="font-bold text-lg leading-none">{days}</div>
-                      <div className="text-[10px]">{lang === "ar" ? "يوم" : "days"}</div>
-                    </div>
-                  </Card>
-                </Link>
-              );
-            })}
-          </div>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <Card className="p-6 text-center text-muted-foreground">
+              {lang === "ar"
+                ? "لا توجد مواعيد نهائية رسمية موحدة منشورة حالياً؛ راجع صفحة كل برنامج والنداء الحالي."
+                : "No official fixed deadlines are currently published; check each programme page and current call."}
+            </Card>
+          )}
         </div>
       </section>
 

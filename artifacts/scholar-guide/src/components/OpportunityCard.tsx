@@ -9,6 +9,7 @@ type Opp = {
   title: string;
   titleAr: string;
   type: string;
+  category: { ar: string; en: string };
   countryCode: string;
   countryName: string;
   countryNameAr: string;
@@ -16,7 +17,8 @@ type Opp = {
   degreeLevel: string;
   field: string;
   funding: string;
-  deadline: string;
+  deadline: string | null;
+  deadlineType: "call" | "rolling";
   featured?: boolean;
 };
 
@@ -25,10 +27,12 @@ export function OpportunityCard({ opp, flag }: { opp: Opp; flag?: string }) {
   const title = lang === "ar" ? opp.titleAr : opp.title;
   const country = lang === "ar" ? opp.countryNameAr : opp.countryName;
 
-  const daysUntil = Math.ceil(
-    (new Date(opp.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
-  );
-  const urgent = daysUntil < 30 && daysUntil > 0;
+  const daysUntil = opp.deadline
+    ? Math.ceil(
+        (new Date(opp.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+      )
+    : null;
+  const urgent = daysUntil !== null && daysUntil < 30 && daysUntil > 0;
 
   return (
     <Link href={`/opportunities/${opp.id}`}>
@@ -64,11 +68,8 @@ export function OpportunityCard({ opp, flag }: { opp: Opp; flag?: string }) {
             <GraduationCap className="h-3 w-3 mr-1" />
             {opp.degreeLevel}
           </Badge>
-          <Badge
-            variant={opp.type === "scholarship" ? "secondary" : "default"}
-            className="text-xs"
-          >
-            {opp.type === "scholarship" ? t("scholarship") : t("migration")}
+          <Badge variant={opp.type === "scholarship" ? "secondary" : "default"} className="text-xs">
+            {lang === "ar" ? opp.category.ar : opp.category.en}
           </Badge>
           <Badge variant="outline" className="text-xs">
             {opp.funding}
@@ -78,15 +79,27 @@ export function OpportunityCard({ opp, flag }: { opp: Opp; flag?: string }) {
         <div className="flex items-center justify-between pt-3 border-t border-border/50 text-xs">
           <div className={`flex items-center gap-1 ${urgent ? "text-destructive font-medium" : "text-muted-foreground"}`}>
             <Calendar className="h-3 w-3" />
-            <span>
-              {new Date(opp.deadline).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </span>
+            {opp.deadline ? (
+              <span>
+                {new Date(opp.deadline).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </span>
+            ) : (
+              <span>
+                {opp.deadlineType === "rolling"
+                  ? lang === "ar"
+                    ? "لا يوجد موعد سنوي ثابت"
+                    : "No fixed annual deadline"
+                  : lang === "ar"
+                    ? "راجع النداء الرسمي"
+                    : "Check the official call"}
+              </span>
+            )}
           </div>
-          {daysUntil > 0 && (
+          {daysUntil !== null && daysUntil > 0 && (
             <span className={`text-xs ${urgent ? "text-destructive" : "text-muted-foreground"}`}>
               {lang === "ar" ? `بعد ${daysUntil} يوم` : `${daysUntil}d left`}
             </span>

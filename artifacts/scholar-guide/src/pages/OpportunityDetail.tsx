@@ -50,7 +50,9 @@ export default function OpportunityDetail() {
   const flag = countries.data?.find((c) => c.code === o.countryCode)?.flag;
   const title = lang === "ar" ? o.titleAr : o.title;
   const country = lang === "ar" ? o.countryNameAr : o.countryName;
-  const days = Math.ceil((new Date(o.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  const days = o.deadline
+    ? Math.ceil((new Date(o.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : null;
 
   const applyHref = o.applicationUrl;
 
@@ -148,7 +150,7 @@ export default function OpportunityDetail() {
 
             <div className="flex flex-wrap gap-2 mb-6">
               <Badge variant="outline"><GraduationCap className="h-3 w-3 mr-1" />{o.degreeLevel}</Badge>
-              <Badge variant="secondary">{o.type === "scholarship" ? t("scholarship") : t("migration")}</Badge>
+              <Badge variant="secondary">{o.category[lang]}</Badge>
               <Badge variant="outline">{o.funding}</Badge>
               <Badge variant="outline">{o.field}</Badge>
               {o.amount && <Badge variant="outline">{o.amount}</Badge>}
@@ -213,27 +215,48 @@ export default function OpportunityDetail() {
           <Card className="p-6 sticky top-20">
             <div className="text-center mb-4">
               <div className="text-xs text-muted-foreground mb-1">{t("deadline")}</div>
-              <div className="text-2xl font-extrabold">
-                {new Date(o.deadline).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </div>
-              <div className={`text-sm mt-1 ${days < 30 ? "text-destructive" : "text-primary"}`}>
-                <Calendar className="h-3 w-3 inline mr-1" />
-                {days > 0
-                  ? lang === "ar"
-                    ? `متبقي ${days} يوم`
-                    : `${days} days left`
-                  : lang === "ar"
-                    ? "انتهى"
-                    : "Closed"}
-              </div>
+              {o.deadline && days !== null ? (
+                <>
+                  <div className="text-2xl font-extrabold">
+                    {new Date(o.deadline).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </div>
+                  <div className={`text-sm mt-1 ${days < 30 ? "text-destructive" : "text-primary"}`}>
+                    <Calendar className="h-3 w-3 inline mr-1" />
+                    {days > 0
+                      ? lang === "ar"
+                        ? `متبقي ${days} يوم`
+                        : `${days} days left`
+                      : lang === "ar"
+                        ? "انتهى"
+                        : "Closed"}
+                  </div>
+                </>
+              ) : (
+                <div className="text-sm text-muted-foreground">
+                  <Calendar className="h-4 w-4 inline mr-1" />
+                  {o.deadlineType === "rolling"
+                    ? lang === "ar"
+                      ? "لا يوجد موعد نهائي سنوي ثابت"
+                      : "No fixed annual deadline"
+                    : lang === "ar"
+                      ? "راجع النداء الرسمي الحالي"
+                      : "Check the current official call"}
+                </div>
+              )}
             </div>
             
 
             <div className="space-y-2">
+              {o.programUrl && <Button asChild variant="outline" className="w-full gap-2">
+                <a href={o.programUrl} target="_blank" rel="noopener noreferrer">
+                  {lang === "ar" ? "صفحة البرنامج الرسمية" : "Official programme page"}
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </Button>}
               {applyHref ? <Button asChild className="w-full gap-2" size="lg">
                 <a href={applyHref} target="_blank" rel="noopener noreferrer">
                   {t("apply_now")}
