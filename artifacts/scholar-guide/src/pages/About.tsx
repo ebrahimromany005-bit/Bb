@@ -41,8 +41,8 @@ export default function About() {
               </p>
               <p>
                 {isAr
-                  ? 'نجمع في مكان واحد أكثر من 4500 فرصة دراسية وهجرة في 191 دولة، ونُقدّم محتوى عربياً متخصصاً يُساعدك في اتخاذ أفضل القرارات.'
-                  : 'We aggregate over 4,500 study and migration opportunities across 191 countries, providing specialized Arabic content to help you make the best decisions.'}
+                  ? 'نجمع في مكان واحد أكثر من 50 فرصة دراسية وهجرة في 10 دولة، ونُقدّم محتوى عربياً متخصصاً يُساعدك في اتخاذ أفضل القرارات.'
+                  : 'We aggregate over 50 study and migration opportunities across 10 countries, providing specialized Arabic content to help you make the best decisions.'}
               </p>
             </CardContent>
           </Card>
@@ -56,10 +56,12 @@ export default function About() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
-              { icon: Globe, ar: '191 دولة', en: '191 Countries', desc_ar: 'فرص دراسية وهجرة في كل دول العالم', desc_en: 'Study & migration opportunities worldwide' },
-              { icon: FileText, ar: '+4500 فرصة', en: '4500+ Opportunities', desc_ar: 'منح دراسية وبرامج هجرة متنوعة', desc_en: 'Diverse scholarships and migration programs' },
-              { icon: BookOpen, ar: '30 مقالاً', en: '30 Articles', desc_ar: 'محتوى متخصص عن المنح والدراسة', desc_en: 'Expert content on scholarships & study' },
-              { icon: Users, ar: 'مجتمع داعم', en: 'Supportive Community', desc_ar: 'مساعد ذكي يجيب على كل أسئلتك', desc_en: 'Smart assistant answering all your questions' },
+              { icon: Globe, ar: '10 دولة', en: '10 Countries', desc_ar: 'فرص دراسية وهجرة في كل دول العالم', desc_en: 'Study & migration opportunities worldwide' },
+              { icon: FileText, ar: '+50 فرصة', en: '50+ Opportunities', desc_ar: 'منح دراسية وبرامج هجرة متنوعة', desc_en: 'Diverse scholarships and migration programs' },
+                         { icon: BookOpen, ar: '30 مقالاً', en: '30 Articles', desc_ar: 'محتوى متخصص عن المنح والدراسة', desc_en: 'Expert content on scholarships & study' },
+      { icon: Users, ar: 'مجتمع داعم', en: 'Supportive Community', desc_ar: 'مستعدون دائماً لمساعدتك في رحلتك', desc_en: 'Always ready to help you on your journey' },
+      
+      
             ].map((item, i) => (
               <Card key={i} className="p-4">
                 <div className="flex items-start gap-3">
