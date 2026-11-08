@@ -164,7 +164,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     </div>
   )}
 */}
-      )}
+      
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 w-full bg-background border-t shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-40 flex items-center justify-around h-16 px-2 safe-area-bottom">
