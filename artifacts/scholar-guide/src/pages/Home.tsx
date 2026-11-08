@@ -62,8 +62,8 @@ export default function Home() {
           </h1>
           <p className="text-base md:text-xl opacity-90 max-w-2xl mx-auto mb-8">
             {lang === "ar"
-              ? "استكشف آلاف الفرص في 160+ دولة، تتبع طلباتك، واحصل على إرشادات ذكية."
-              : "Discover thousands of opportunities in 160+ countries, track your applications, get AI guidance."}
+              ? "استكشف آلاف الفرص في 10+ دولة، تتبع طلباتك، واحصل على إرشادات ذكية."
+              : "Discover thousands of opportunities in 10+ countries, track your applications, get AI guidance."}
           </p>
 
           <form
@@ -243,8 +243,8 @@ export default function Home() {
               <h3 className="font-bold text-2xl mb-1">{t("scholarships")}</h3>
               <p className="text-muted-foreground text-sm">
                 {lang === "ar"
-                  ? "آلاف المنح الممولة كاملاً وجزئياً للبكالوريوس والماجستير والدكتوراه."
-                  : "Thousands of fully and partially funded opportunities for Bachelor's, Master's, and PhD."}
+                  ? "عشرات المنح الممولة كاملاً وجزئياً للبكالوريوس والماجستير والدكتوراه."
+                  : "Tens of fully and partially funded opportunities for Bachelor's, Master's, and PhD."}
               </p>
             </Card>
           </Link>

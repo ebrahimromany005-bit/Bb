@@ -153,15 +153,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {/* Floating Chat Bubble */}
-      {location !== '/assistant' && (
-        <div className={`fixed bottom-20 md:bottom-6 ${lang === 'ar' ? 'left-6' : 'right-6'} z-50`}>
-          <Link href="/assistant">
-            <Button size="icon" className="h-14 w-14 rounded-full shadow-xl bg-primary hover:bg-primary/90 text-primary-foreground">
-              <MessageSquare className="h-6 w-6" />
-            </Button>
-          </Link>
-        </div>
+      {/* 
+  {location !== '/assistant' && (
+    <div className='fixed bottom-20 md:bottom-6 ...'>
+      <Link href='/assistant'>
+        <Button size='icon' ...>
+          <MessageSquare className='h-6 w-6' />
+        </Button>
+      </Link>
+    </div>
+  )}
+*/}
       )}
 
       {/* Mobile Bottom Nav */}
