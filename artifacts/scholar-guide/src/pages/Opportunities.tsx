@@ -1,4 +1,4 @@
-import { useState, useMemo, Fragment } from "react";
+import { useState, useMemo, Fragment, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useLang } from "@/lib/i18n";
 import { localCountries, opportunities as localOpportunities } from "@/data/opportunities";
@@ -30,6 +30,16 @@ function useQueryParam(key: string): string {
 type TypeKey = "all" | "scholarship" | "migration";
 
 export default function Opportunities() {
+    useEffect(() => {
+    let link = document.querySelector("link[rel='canonical']") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "canonical";
+      document.head.appendChild(link);
+    }
+    link.href = "https://globalscholarguide.online/opportunities";
+  }, []);
+  
   const { lang, t } = useLang();
   const initialType = useQueryParam("type") as TypeKey | "";
   const initialQ = useQueryParam("q");
