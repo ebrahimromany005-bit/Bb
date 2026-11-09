@@ -395,20 +395,23 @@ export default function Learn() {
         ))}
       </div>
 
-      <Card className="p-6 bg-gradient-to-br from-primary/10 to-secondary/10 mb-6">
-        <Sparkles className="h-6 w-6 text-primary mb-2" />
-        <h3 className="font-bold text-lg mb-1">
-          {lang === "ar" ? "اسأل ScholarBot أي سؤال" : "Ask ScholarBot anything"}
-        </h3>
-        <p className="text-sm text-muted-foreground mb-3">
-          {lang === "ar"
-            ? "مساعد ذكي متاح 24/7 يجيب على كل أسئلتك حول المنح والهجرة."
-            : "AI assistant available 24/7 for all your scholarship and migration questions."}
-        </p>
-        <Button asChild>
-          <a href="/assistant">{lang === "ar" ? "ابدأ المحادثة" : "Start chatting"}</a>
-        </Button>
-      </Card>
+      {/* 
+    <Card className="p-6 bg-gradient-to-br from-primary/10 to-secondary/10 mb-6">
+      <Sparkles className="h-6 w-6 text-primary mb-2" />
+      <h3 className="font-bold text-lg mb-1">
+        {lang === "ar" ? "اسأل ScholarBot أي سؤال" : "Ask ScholarBot anything"}
+      </h3>
+      <p className="text-sm text-muted-foreground mb-3">
+        {lang === "ar" 
+          ? "مساعد ذكي متاح 24/7 يجيب على كل أسئلتك حول المنح والهجرة."
+          : "AI assistant available 24/7 for all your scholarship and migration questions."}
+      </p>
+      <Button asChild>
+        <a href="/assistant">{lang === "ar" ? "ابدأ المحادثة" : "Start chatting"}</a>
+      </Button>
+    </Card>
+*/}
+      
 
       <AdSlot slot="learn_inline" size="banner" />
 
