@@ -63,7 +63,7 @@ export default function Premium() {
   const freeFeatures = lang === "ar" ? FREE_AR : FREE_EN;
   const premiumFeatures = lang === "ar" ? PREMIUM_AR : PREMIUM_EN;
 
-  return (
+  return ({/*
     <div className="container mx-auto px-4 py-10 max-w-4xl">
       <div className="text-center mb-10">
         <div className="bg-accent text-accent-foreground w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -157,5 +157,5 @@ export default function Premium() {
         </p>
       </div>
     </div>
-  );
+ */} );
 }
