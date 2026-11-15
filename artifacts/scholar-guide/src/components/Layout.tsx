@@ -158,7 +158,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {location !== '/assistant' && (
+      {/* Floating chat button hidden: change false back to  location !== '/assistant'  to show it again */}
+      {false && (
         <div className="fixed bottom-20 md:bottom-6 right-4 z-30">
           <Link href="/assistant">
             <Button size="icon" className="h-12 w-12 rounded-full shadow-lg">
