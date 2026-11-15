@@ -66,15 +66,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Button variant="outline" size="sm" onClick={toggleLang} className="font-bold px-3">
               {lang === 'ar' ? 'EN' : 'عربي'}
             </Button>
-            {/*
-            <Link href="/premium">
-              <Button variant="default" size="sm" className="hidden sm:flex gap-1.5 bg-gradient-to-r from-accent to-amber-400 text-accent-foreground border-none hover:opacity-90">
-                <Crown className="h-4 w-4" />
-                {t('premium')}
-              </Button>
-            
-            </Link>
-            */}
           </div>
         </div>
       </header>
@@ -82,7 +73,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm md:hidden" onClick={() => setMobileMenuOpen(false)}>
-          <div className={`fixed inset-y-0 ${lang === 'ar' ? 'right-0' : 'left-0'} w-3/4 max-w-sm bg-background border-${lang === 'ar' ? 'l' : 'r'} shadow-xl p-6 overflow-y-auto`} onClick={e => e.stopPropagation()}>
+          <div
+            className={`fixed inset-y-0 ${lang === 'ar' ? 'right-0' : 'left-0'} w-3/4 max-w-sm bg-background border-${lang === 'ar' ? 'l' : 'r'} shadow-xl p-6 overflow-y-auto`}
+            onClick={e => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between mb-8">
               <Link href="/" className="flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
                 <Globe className="h-6 w-6 text-primary" />
@@ -92,6 +86,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <X className="h-5 w-5" />
               </Button>
             </div>
+
             <nav className="flex flex-col gap-2">
               {navLinks.map(link => (
                 <Link key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)}>
@@ -99,18 +94,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <link.icon className="h-5 w-5" />
                     {link.label}
                   </div>
-                  {/*
                 </Link>
               ))}
-              <div className="my-4 border-t" />
-              <Link href="/premium" onClick={() => setMobileMenuOpen(false)}>
-                <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-500">
-                
-                  <Crown className="h-5 w-5" />
-                  {t('premium')}
-                </div>
-              </Link>
-              */}
+
+              {/* Premium hidden: change false to true to show it again */}
+              {false && (
+                <>
+                  <div className="my-4 border-t" />
+                  <Link href="/premium" onClick={() => setMobileMenuOpen(false)}>
+                    <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-500">
+                      <Crown className="h-5 w-5" />
+                      {t('premium')}
+                    </div>
+                  </Link>
+                </>
+              )}
+
               <Link href="/about" onClick={() => setMobileMenuOpen(false)}>
                 <div className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted">
                   <Globe className="h-5 w-5" />
@@ -159,18 +158,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {/* 
-  {location !== '/assistant' && (
-    <div className='fixed bottom-20 md:bottom-6 ...'>
-      <Link href='/assistant'>
-        <Button size='icon' ...>
-          <MessageSquare className='h-6 w-6' />
-        </Button>
-      </Link>
-    </div>
-  )}
-*/}
-      
+      {location !== '/assistant' && (
+        <div className="fixed bottom-20 md:bottom-6 right-4 z-30">
+          <Link href="/assistant">
+            <Button size="icon" className="h-12 w-12 rounded-full shadow-lg">
+              <MessageSquare className="h-6 w-6" />
+            </Button>
+          </Link>
+        </div>
+      )}
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 w-full bg-background border-t shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-40 flex items-center justify-around h-16 px-2 safe-area-bottom">
