@@ -62,8 +62,8 @@ export default function Home() {
           </h1>
           <p className="text-base md:text-xl opacity-90 max-w-2xl mx-auto mb-8">
             {lang === "ar"
-              ? "استكشف آلاف الفرص في 10+ دولة، تتبع طلباتك، واحصل على إرشادات ذكية."
-              : "Discover thousands of opportunities in 10+ countries, track your applications, get AI guidance."}
+              ? "استكشف عشرات الفرص في 10+ دولة، تتبع طلباتك، واحصل على إرشادات ذكية."
+              : "Discover dozens  of opportunities in 10+ countries, track your applications, get AI guidance."}
           </p>
 
           <form
