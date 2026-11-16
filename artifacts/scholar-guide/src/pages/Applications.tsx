@@ -210,6 +210,7 @@ export default function Applications() {
           ))}
         </div>
       )}
+{/*
 
       <Card className="mt-8 p-6 bg-gradient-to-br from-accent/10 to-amber-100/40 border-accent/30">
         <div className="flex items-start gap-3">
@@ -231,6 +232,8 @@ export default function Applications() {
           </div>
         </div>
       </Card>
+      */}
+      
     </div>
   );
 }

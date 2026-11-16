@@ -18,7 +18,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: '/countries', label: t('countries'), icon: Map },
     { href: '/blog', label: t('blog'), icon: Newspaper },
     { href: '/applications', label: t('tracker'), icon: LayoutList },
-    { href: '/documents', label: t('documents'), icon: FileText },
+   // { href: '/documents', label: t('documents'), icon: FileText },
+    
+   
     { href: '/learn', label: t('academy'), icon: BookOpen },
   ];
 
