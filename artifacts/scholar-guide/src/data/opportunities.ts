@@ -277,6 +277,223 @@ const specs: Spec[] = [
     ]
   },
       
+[
+  {
+    id: 3,
+    slug: "uk-chevening-scholarship",
+    title: "Chevening Scholarships (UK Government Global Scholarship)",
+    titleAr: "منحة تشيفنينج الحكومية البريطانية للماجستير",
+    type: "scholarship",
+    categoryEn: "Scholarship",
+    categoryAr: "منحة دراسية",
+    countryCode: "GB",
+    organization: "UK Foreign, Commonwealth and Development Office (FCDO) and Partner Organisations",
+    degreeLevel: "Master's (Full-time, One-year Taught Master's Degree)",
+    field: "Eligible Master's Courses at Participating UK Universities",
+    funding: "Fully funded scholarship covering eligible tuition fees, living allowance, travel and specified additional allowances",
+    amount: "Full eligible tuition fees, monthly living allowance and travel support according to the official award terms",
+    duration: "1 year (eligible full-time Master's programme)",
+    deadline: null,
+    deadlineType: "call",
+    programUrl: "https://www.chevening.org/scholarships/",
+    applicationUrl: "https://www.chevening.org/apply/",
+    featured: true,
+    lastVerifiedAt: "2026-11-28",
+    status: "closed",
+    officialSources: [
+      "https://www.chevening.org/scholarship/egypt/",
+      "https://www.chevening.org/scholarships/application-timeline/",
+      "https://www.chevening.org/scholarships/guidance/courses/"
+    ],
+    overviewAr: "تُعد منحة تشيفنينج من أبرز برامج المنح الحكومية البريطانية، وهي ممولة من وزارة الخارجية والكومنولث والتنمية البريطانية (FCDO) وشركائها. تستهدف المنحة الأفراد الذين يمتلكون إمكانات قيادية وخبرة مهنية ويرغبون في دراسة الماجستير بدوام كامل لمدة عام واحد في جامعة بريطانية مؤهلة. يشترط البرنامج اختيار ثلاثة برامج ماجستير مؤهلة، والتقديم إليها بشكل منفصل لدى الجامعات، مع الحصول على عرض قبول غير مشروط من أحد الخيارات الثلاثة قبل الموعد النهائي المحدد. ويلتزم الحاصل على المنحة بالعودة إلى بلده المؤهل لمدة عامين على الأقل بعد انتهاء الدراسة. مواعيد التقديم تتغير سنوياً، ويجب مراجعة صفحة الدولة لمعرفة حالة الدورة الحالية.",
+    overviewEn: "Chevening is the UK government's international scholarship programme, funded by the Foreign, Commonwealth and Development Office and partner organisations. It supports individuals with leadership potential and relevant professional experience who wish to pursue a full-time, one-year taught Master's degree at an eligible UK university. Applicants must select three eligible courses, apply separately to the universities and secure an unconditional offer from at least one selected course by the applicable deadline. Successful scholars must return to their eligible home country for at least two years after completing the award. Application dates and availability vary by annual scholarship cycle.",
+    eligibilityAr: [
+      "أن يكون المتقدم مواطناً في دولة أو إقليم مؤهل ضمن قائمة الدول المشاركة في دورة المنحة الحالية.",
+      "الالتزام بالعودة إلى البلد المؤهل لمدة عامين على الأقل بعد انتهاء المنحة.",
+      "الحصول على شهادة جامعية تؤهل المتقدم للالتحاق ببرنامج ماجستير في المملكة المتحدة.",
+      "امتلاك خبرة عملية لا تقل عن 2,800 ساعة، بما يعادل عادةً سنتين من الخبرة، وفق قواعد احتساب Chevening.",
+      "إظهار مهارات القيادة والتأثير والقدرة على بناء العلاقات المهنية.",
+      "اختيار ثلاثة برامج ماجستير مؤهلة والتقديم إليها بشكل مستقل.",
+      "الحصول على عرض قبول جامعي غير مشروط من أحد البرامج الثلاثة قبل الموعد النهائي المحدد.",
+      "عدم الوقوع ضمن حالات عدم الأهلية المحددة في شروط Chevening، بما فيها بعض حالات العمل أو الدراسة المرتبطة بالحكومة البريطانية."
+    ],
+    eligibilityEn: [
+      "Be a citizen of a country or territory eligible for the current Chevening scholarship cycle.",
+      "Commit to returning to the eligible home country for at least two years after the scholarship ends.",
+      "Hold an undergraduate degree that qualifies the applicant for admission to a UK Master's programme.",
+      "Have at least 2,800 hours of eligible work experience, generally equivalent to two years, under Chevening rules.",
+      "Demonstrate leadership potential, influencing skills and professional networking abilities.",
+      "Select three eligible Master's courses and apply to them separately.",
+      "Obtain an unconditional offer from at least one selected course before the official deadline.",
+      "Meet all Chevening eligibility requirements and avoid the programme's specified disqualifying circumstances."
+    ],
+    benefitsAr: [
+      "تغطية الرسوم الدراسية للبرنامج المؤهل وفق شروط المنحة وحدود التمويل المقررة.",
+      "مخصص مالي شهري لتغطية تكاليف المعيشة في المملكة المتحدة.",
+      "بدل سفر دولي ذهاباً وإياباً وفق شروط المنحة.",
+      "بدلات محددة مرتبطة بالوصول والمغادرة وبعض متطلبات الدراسة والتأشيرة وفق قواعد البرنامج.",
+      "فرصة الانضمام إلى شبكة خريجي Chevening الدولية.",
+      "المشاركة في فعاليات وأنشطة مهنية وأكاديمية مرتبطة ببرنامج المنحة."
+    ],
+    benefitsEn: [
+      "Coverage of eligible university tuition fees subject to the scholarship's funding terms and applicable limits.",
+      "Monthly living allowance to support scholars during their stay in the UK.",
+      "International return travel support under the award conditions.",
+      "Specified allowances related to arrival, departure and certain visa or study requirements.",
+      "Membership in the international Chevening alumni network.",
+      "Access to professional networking activities and programme events."
+    ],
+    documentsAr: [
+      "جواز سفر ساري المفعول أو وثيقة هوية مقبولة وفق تعليمات التقديم.",
+      "بيانات المؤهل الجامعي وشهادة التخرج وكشف الدرجات.",
+      "تفاصيل الخبرة العملية التي تثبت استيفاء شرط 2,800 ساعة.",
+      "إجابات أسئلة طلب Chevening المتعلقة بالقيادة والتأثير وبناء العلاقات وخطط الدراسة.",
+      "بيانات برامج الماجستير الثلاثة المختارة.",
+      "خطابات التوصية المطلوبة في مرحلة التقديم أو المقابلة.",
+      "عرض القبول الجامعي غير المشروط من أحد البرامج المختارة قبل الموعد المحدد.",
+      "إثباتات إضافية مثل شهادة اللغة أو المستندات الأكاديمية المترجمة إذا طلبتها الجامعة."
+    ],
+    documentsEn: [
+      "Valid passport or acceptable identity document under application instructions.",
+      "Undergraduate degree certificate and academic transcript.",
+      "Work experience details demonstrating the required 2,800 hours.",
+      "Completed Chevening application responses covering leadership, influencing, networking and study plans.",
+      "Details of the three selected eligible Master's courses.",
+      "Required reference letters at the relevant application or interview stage.",
+      "Unconditional university offer from at least one selected course by the specified deadline.",
+      "Additional documents such as language evidence or certified academic translations if requested by the university."
+    ],
+    stepsAr: [
+      "افتح صفحة Chevening الرسمية الخاصة بدولتك وتأكد من أهلية الجنسية وحالة دورة التقديم.",
+      "راجع شروط المنحة والخبرة العملية المطلوبة قبل البدء في الطلب.",
+      "اختر ثلاثة برامج ماجستير مؤهلة في الجامعات البريطانية.",
+      "أنشئ حساباً على بوابة Chevening واملأ نموذج التقديم والإجابات المطلوبة.",
+      "أرسل طلب المنحة قبل الموعد النهائي المعلن.",
+      "تقدم بشكل منفصل إلى الجامعات الثلاث المختارة وتابع طلبات القبول.",
+      "إذا تم اختيارك للمقابلة، جهز المستندات المطلوبة واحصل على عرض قبول غير مشروط من أحد البرامج قبل الموعد النهائي.",
+      "تابع النتيجة النهائية وتعليمات استكمال إجراءات المنحة والتأشيرة."
+    ],
+    stepsEn: [
+      "Visit the official Chevening country page and confirm your nationality eligibility and application-cycle status.",
+      "Review the work experience and scholarship eligibility requirements.",
+      "Select three eligible Master's courses at UK universities.",
+      "Create an account on the Chevening application portal and complete the required application responses.",
+      "Submit your scholarship application before the published deadline.",
+      "Apply separately to your selected universities and monitor admission decisions.",
+      "If shortlisted for an interview, prepare the required documents and obtain an unconditional offer from one selected course by the specified deadline.",
+      "Follow the final award decision and complete scholarship and visa arrangements."
+    ]
+  },
+  {
+    id: 4,
+    slug: "uk-skilled-worker-visa",
+    title: "UK Skilled Worker Visa (Employment & Residence Pathway)",
+    titleAr: "تأشيرة العامل الماهر في المملكة المتحدة (Skilled Worker Visa)",
+    type: "migration",
+    categoryEn: "Immigration Pathway",
+    categoryAr: "مسار هجرة وعمل",
+    countryCode: "GB",
+    organization: "UK Visas and Immigration (UKVI) / UK Home Office",
+    degreeLevel: "Eligible Skilled Occupation with an Approved UK Employer Sponsor",
+    field: "Skilled Employment in Eligible UK Occupations",
+    funding: "Employer-sponsored immigration pathway; applicants may need to pay visa fees, Immigration Health Surcharge and personal maintenance costs",
+    amount: "Usually at least £41,700/year or the occupation-specific going rate, whichever is higher; exceptions and salary discounts apply",
+    duration: "Up to 5 years per application, subject to the Certificate of Sponsorship and immigration rules",
+    deadline: null,
+    deadlineType: "rolling",
+    programUrl: "https://www.gov.uk/skilled-worker-visa",
+    applicationUrl: "https://www.gov.uk/skilled-worker-visa/apply-from-outside-the-uk",
+    featured: true,
+    lastVerifiedAt: "2026-11-28",
+    status: "open",
+    officialSources: [
+      "https://www.gov.uk/skilled-worker-visa",
+      "https://www.gov.uk/skilled-worker-visa/your-job",
+      "https://www.gov.uk/skilled-worker-visa/documents-you-must-provide",
+      "https://www.gov.uk/skilled-worker-visa/how-much-it-costs",
+      "https://www.gov.uk/skilled-worker-visa/your-partner-and-children"
+    ],
+    overviewAr: "تتيح تأشيرة العامل الماهر البريطانية (Skilled Worker Visa) للأشخاص المؤهلين من خارج المملكة المتحدة العمل والإقامة في بريطانيا بعد الحصول على عرض عمل من جهة بريطانية معتمدة من وزارة الداخلية كجهة راعية (Licensed Sponsor). يجب أن تكون الوظيفة ضمن المهن المؤهلة وأن يحصل المتقدم على شهادة رعاية (Certificate of Sponsorship) من صاحب العمل، بالإضافة إلى استيفاء متطلبات مستوى الوظيفة والراتب وإتقان اللغة الإنجليزية. تختلف حدود الرواتب حسب رمز المهنة ومعدل الأجر المعتمد، وتوجد استثناءات وتخفيضات لفئات معينة. تسمح التأشيرة بالإقامة لمدة تصل إلى خمس سنوات وفق مدة الرعاية والقواعد المعمول بها، ويمكن تمديدها أو التقدم للإقامة الدائمة عند استيفاء الشروط القانونية.",
+    overviewEn: "The UK Skilled Worker Visa allows eligible overseas nationals to work and live in the United Kingdom after securing a qualifying job offer from an employer approved by the Home Office. Applicants need a valid Certificate of Sponsorship, an eligible occupation code and compliance with the applicable skill, salary and English language requirements. Salary thresholds depend on the occupation and individual circumstances, with specific discounts and exceptions available under certain rules. The visa can be granted for up to five years, depending on the sponsorship period, and may provide a route to extension and settlement when the relevant legal conditions are met.",
+    eligibilityAr: [
+      "الحصول على عرض عمل حقيقي من صاحب عمل بريطاني معتمد كجهة راعية لدى وزارة الداخلية.",
+      "امتلاك رقم شهادة رعاية صالح (Certificate of Sponsorship) صادر من صاحب العمل.",
+      "أن تكون الوظيفة ضمن قائمة المهن المؤهلة وباستخدام رمز المهنة الصحيح.",
+      "أن تستوفي الوظيفة مستوى المهارة المطلوب وفق قواعد التأشيرة الحالية، مع وجود استثناءات محددة لبعض المهن والفئات الانتقالية.",
+      "استيفاء الحد الأدنى للراتب العام البالغ عادةً 41,700 جنيه إسترليني سنوياً أو معدل الأجر المعتمد للمهنة، أيهما أعلى، مع مراعاة الاستثناءات والتخفيضات القانونية.",
+      "إثبات إتقان اللغة الإنجليزية بالمستوى المطلوب، ويكون المستوى B2 للطلبات الخاضعة للقواعد السارية منذ 8 يناير 2026، مع مراعاة الاستثناءات الانتقالية.",
+      "توفير إثبات القدرة المالية الشخصية إذا لم يتعهد صاحب العمل بتغطية نفقات المعيشة وفق القواعد الرسمية.",
+      "استيفاء متطلبات فحص السل أو السجل الجنائي إذا كانت تنطبق على حالة المتقدم أو مهنته."
+    ],
+    eligibilityEn: [
+      "Have a genuine job offer from a UK employer holding an approved Home Office sponsor licence.",
+      "Obtain a valid Certificate of Sponsorship reference number from the employer.",
+      "Work in an occupation included in the eligible Skilled Worker occupation rules under the correct occupation code.",
+      "Meet the applicable job skill-level requirements, subject to specific occupation and transitional exceptions.",
+      "Meet the applicable salary threshold, usually £41,700 per year or the occupation-specific going rate, whichever is higher, subject to permitted discounts and exceptions.",
+      "Demonstrate the required English proficiency, generally CEFR B2 for applications subject to the rules effective from 8 January 2026, with applicable transitional exceptions.",
+      "Show sufficient personal maintenance funds unless the approved sponsor certifies maintenance under the official rules.",
+      "Meet tuberculosis testing or criminal record certificate requirements where applicable."
+    ],
+    benefitsAr: [
+      "الإقامة والعمل بصورة قانونية في المملكة المتحدة لدى جهة العمل والوظيفة المحددتين في شهادة الرعاية.",
+      "إمكانية تمديد التأشيرة عند استمرار استيفاء شروط الوظيفة والرعاية والراتب.",
+      "إمكانية تغيير صاحب العمل أو الوظيفة بعد استكمال إجراءات تحديث التأشيرة والرعاية المطلوبة.",
+      "إمكانية اصطحاب الزوج أو الزوجة والأطفال المعالين إذا كانت المهنة وقواعد التأشيرة تسمح بذلك.",
+      "إمكانية الدراسة أثناء الإقامة وفق القيود المقررة.",
+      "إمكانية التقدم للحصول على الإقامة الدائمة بعد استيفاء مدة الإقامة والشروط القانونية، والتي تكون عادةً خمس سنوات لهذا المسار."
+    ],
+    benefitsEn: [
+      "Legal residence and employment in the UK in the sponsored role.",
+      "Ability to extend the visa if the sponsorship and immigration requirements continue to be met.",
+      "Possibility of changing employers or roles after completing the required sponsorship and visa update procedures.",
+      "Potential to bring an eligible partner and dependent children, subject to occupation-specific dependant restrictions.",
+      "Permission to study subject to applicable conditions.",
+      "Potential eligibility for settlement after meeting the required qualifying residence period and legal criteria, generally five years."
+    ],
+    documentsAr: [
+      "جواز سفر ساري المفعول أو وثيقة رسمية تثبت الهوية والجنسية.",
+      "الرقم المرجعي لشهادة الرعاية (Certificate of Sponsorship) الصادرة من صاحب العمل.",
+      "المسمى الوظيفي والراتب السنوي ورمز المهنة (Occupation Code).",
+      "إثبات إتقان اللغة الإنجليزية وفق متطلبات التأشيرة.",
+      "إثبات الأموال الشخصية المطلوبة، عادةً 1,270 جنيهاً إسترلينياً لمدة 28 يوماً متواصلة، إذا لم يكن المتقدم معفى أو كان صاحب العمل يتعهد بتغطيتها.",
+      "شهادة فحص السل إذا كان المتقدم مقيماً في دولة تتطلب إجراء هذا الفحص.",
+      "شهادة السجل الجنائي للوظائف أو القطاعات التي تتطلب ذلك.",
+      "مستندات إضافية حسب ظروف المتقدم وطلب السفارة أو وزارة الداخلية."
+    ],
+    documentsEn: [
+      "Valid passport or official document proving identity and nationality.",
+      "Certificate of Sponsorship reference number issued by the approved UK employer.",
+      "Job title, annual salary and occupation code.",
+      "Evidence of English language proficiency under the applicable visa rules.",
+      "Proof of personal maintenance funds, usually £1,270 held for 28 consecutive days, unless exempt or maintenance is certified by the sponsor.",
+      "Tuberculosis test results if the applicant resides in a country where testing is required.",
+      "Criminal record certificate for occupations and sectors where it is mandatory.",
+      "Any additional documents requested based on the applicant's circumstances and official application instructions."
+    ],
+    stepsAr: [
+      "ابحث عن وظيفة مؤهلة لدى صاحب عمل بريطاني معتمد كجهة راعية.",
+      "تحقق من رمز المهنة ومتطلبات المهارة والراتب واللغة الإنجليزية.",
+      "احصل على عرض العمل وشهادة الرعاية (Certificate of Sponsorship) من صاحب العمل.",
+      "جهز جواز السفر وإثبات اللغة والقدرة المالية والمستندات الأخرى المطلوبة.",
+      "احسب رسوم التأشيرة ورسوم الرعاية الصحية للهجرة (Immigration Health Surcharge) وفق مدة الإقامة وحالتك.",
+      "قدم الطلب إلكترونياً عبر موقع GOV.UK من خارج المملكة المتحدة أو داخلها حسب حالتك.",
+      "أكمل إجراءات إثبات الهوية والبيانات الحيوية إذا طُلبت منك.",
+      "بعد صدور التأشيرة، راجع شروط الإقامة والعمل وتاريخ انتهاء التصريح."
+    ],
+    stepsEn: [
+      "Find an eligible vacancy with a UK employer holding an approved sponsor licence.",
+      "Check the occupation code, skill level, salary and English language requirements.",
+      "Receive a qualifying job offer and Certificate of Sponsorship from the employer.",
+      "Prepare your passport, English evidence, financial documents and other required paperwork.",
+      "Calculate the applicable visa application fee and Immigration Health Surcharge.",
+      "Submit your application online through GOV.UK using the appropriate application route.",
+      "Complete identity verification and biometric procedures if required.",
+      "After approval, review your visa conditions, employment restrictions and permission expiry date."
+    ]
+  }
+]
+      
   /*
   
   {
