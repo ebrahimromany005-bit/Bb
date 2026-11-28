@@ -94,6 +94,8 @@ const rollingDeadline =
   "لا يوجد موعد نهائي سنوي ثابت؛ يمكن بدء الإجراء عندما تستوفي الشروط وتكون الجهة مستعدة لاستقبال الطلب.";
 
 const specs: Spec[] = [
+  /*
+  
   {
     id: 101, slug: "daad-epos-germany", titleAr: "منحة DAAD EPOS للدراسات التنموية في ألمانيا",
     title: "DAAD EPOS Development-Related Postgraduate Courses", type: "scholarship",
@@ -1250,6 +1252,8 @@ const specs: Spec[] = [
     stepsAr: ["حدد فئة E-7.", "تحقق من المهنة والراتب.", "ينسق صاحب العمل الطلب.", "لا تبدأ العمل قبل الموافقة."],
     stepsEn: ["Identify the E-7 category.", "Check occupation and salary.", "Coordinate the filing with the employer.", "Do not start work before approval."],
   },
+  */
+  
 ];
 
 const countryByCode = new Map(countries.map((country) => [country.code, country]));
