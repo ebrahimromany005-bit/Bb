@@ -94,6 +94,189 @@ const rollingDeadline =
   "لا يوجد موعد نهائي سنوي ثابت؛ يمكن بدء الإجراء عندما تستوفي الشروط وتكون الجهة مستعدة لاستقبال الطلب.";
 
 const specs: Spec[] = [
+    {
+    id: 1,
+    slug: "daad-epos-germany-scholarship",
+    title: "DAAD EPOS Development-Related Postgraduate Courses in Germany",
+    titleAr: "منحة DAAD EPOS للدراسات العليا المرتبطة بالتنمية في ألمانيا",
+    type: "scholarship",
+    categoryEn: "Scholarship",
+    categoryAr: "منحة دراسية",
+    countryCode: "DE",
+    organization: "German Academic Exchange Service (DAAD)",
+    degreeLevel: "Master's (selected doctoral opportunities subject to specific programme rules)",
+    field: "Development-Related Studies (Engineering, Economics, Public Health, Agriculture, Environmental Sciences and related fields)",
+    funding: "Scholarship support including monthly stipend, insurance and travel allowance subject to official programme conditions",
+    amount: "€992/month for Master's graduates; doctoral/research funding and allowances depend on the applicable DAAD programme rules",
+    duration: "12 to 42 months depending on the selected programme",
+    deadline: null,
+    deadlineType: "call",
+    programUrl: "https://www.daad.de/en/information-services-for-higher-education-institutions/further-information-on-daad-programmes/epos/",
+    applicationUrl: "https://www.daad.de/en/information-services-for-higher-education-institutions/further-information-on-daad-programmes/epos/",
+    featured: true,
+    overviewAr: "تُعد منحة DAAD EPOS من أبرز برامج الدعم الألمانية الموجهة للخريجين من الدول النامية الراغبين في دراسة برامج دراسات عليا مرتبطة بالتنمية المستدامة في ألمانيا. يركز البرنامج بصورة أساسية على برامج الماجستير والدورات العليا المعتمدة ضمن القائمة الرسمية، مع وجود مسارات بحثية أو دكتوراه تخضع لشروط محددة. يشترط البرنامج عادةً خبرة مهنية ذات صلة بعد التخرج، ويختلف موعد التقديم والمستندات المطلوبة وفق الجامعة والبرنامج المختار. يتم التقديم مباشرة إلى الجامعة المستضيفة وليس من خلال بوابة موحدة لجميع البرامج.",
+    overviewEn: "DAAD EPOS is a German scholarship programme supporting graduates from developing countries who wish to pursue development-related postgraduate studies in Germany. It primarily covers selected Master's courses listed in the official EPOS catalogue, while doctoral or research opportunities are subject to specific programme conditions. Applicants generally need relevant professional experience after graduation. Application deadlines, admission requirements and submission procedures vary by host university and selected course.",
+    eligibilityAr: [
+      "الحصول على درجة جامعية مناسبة للبرنامج المختار، وعادةً ما تكون درجة البكالوريوس من برنامج جامعي مدته أربع سنوات وفق متطلبات الدورة.",
+      "امتلاك خبرة مهنية ذات صلة لا تقل غالباً عن سنتين بعد التخرج، وفق شروط البرنامج المحدد.",
+      "امتلاك سجل أكاديمي جيد جداً أو أداء أكاديمي أعلى من المتوسط، مع اختلاف معايير التقييم بين البرامج.",
+      "ألا يكون قد مر أكثر من ست سنوات على آخر مؤهل جامعي وفق شروط DAAD المطبقة.",
+      "إثبات إتقان لغة الدراسة المطلوبة، سواء الإنجليزية أو الألمانية، وفق متطلبات الجامعة.",
+      "أن يكون المتقدم من إحدى الدول المؤهلة ضمن قائمة البرنامج الرسمية.",
+      "توضيح كيفية ارتباط الدراسة بالخبرة المهنية والأهداف التنموية في بلد المتقدم أو منطقته."
+    ],
+    eligibilityEn: [
+      "Hold an appropriate university degree, generally a Bachelor's degree from a four-year university programme where required by the selected course.",
+      "Possess relevant professional experience, commonly at least two years after graduation, depending on the programme.",
+      "Demonstrate above-average academic performance according to the selected course requirements.",
+      "Meet DAAD degree-recency requirements, generally no more than six years since the last university degree.",
+      "Provide proof of English or German proficiency according to the host university's requirements.",
+      "Be a citizen of an eligible country listed under the official programme requirements.",
+      "Demonstrate a clear connection between the selected studies, professional experience and development objectives."
+    ],
+    benefitsAr: [
+      "راتب شهري للطلاب المقبولين في برامج الماجستير بقيمة 992 يورو وفق معدلات المنحة المطبقة.",
+      "تمويل الدكتوراه أو المسارات البحثية وفق فئة التمويل والشروط المحددة في البرنامج المعني.",
+      "تأمين صحي وتأمين ضد الحوادث والمسؤولية الشخصية وفق شروط المنحة.",
+      "بدل سفر للمستفيدين المؤهلين وفق قواعد DAAD.",
+      "إمكانية الحصول على بدلات إضافية للسكن أو أفراد الأسرة في حالات محددة.",
+      "إمكانية توفير دعم أو تدريب لغوي قبل الدراسة إذا نصت عليه شروط المنحة."
+    ],
+    benefitsEn: [
+      "Monthly scholarship stipend of €992 for eligible Master's scholarship holders under the applicable DAAD rate.",
+      "Doctoral or research funding according to the specific funding category and programme rules.",
+      "Health, accident and personal liability insurance subject to scholarship conditions.",
+      "Travel allowance for eligible scholarship recipients under DAAD regulations.",
+      "Possible additional rent or family allowances in qualifying circumstances.",
+      "Preparatory language support where provided under the applicable scholarship conditions."
+    ],
+    documentsAr: [
+      "نموذج الطلب وقائمة التحقق الخاصة بالجامعة وبرنامج DAAD.",
+      "سيرة ذاتية حديثة ومفصلة باللغة المطلوبة، مع توضيح الخبرة المهنية.",
+      "خطاب دوافع يشرح أسباب اختيار البرنامج وأهداف المتقدم المهنية والتنموية.",
+      "شهادة البكالوريوس وكشف الدرجات الأكاديمي.",
+      "شهادات خبرة رسمية تثبت مدة وطبيعة العمل بعد التخرج.",
+      "خطابات توصية أكاديمية أو مهنية حسب متطلبات البرنامج.",
+      "شهادة إثبات اللغة الإنجليزية أو الألمانية وفق متطلبات الجامعة.",
+      "أي مستندات إضافية تطلبها الجامعة المستضيفة."
+    ],
+    documentsEn: [
+      "Completed application form and checklist required by the host university and DAAD programme.",
+      "Updated CV detailing academic background and professional experience.",
+      "Letter of motivation explaining programme selection and professional development goals.",
+      "Bachelor's degree certificate and academic transcripts.",
+      "Official employment certificates proving relevant post-graduation experience.",
+      "Academic or professional recommendation letters where required.",
+      "English or German language certificate according to the selected course requirements.",
+      "Any additional documents requested by the host university."
+    ],
+    stepsAr: [
+      "افتح القائمة الرسمية لدورات DAAD EPOS واختر برنامجاً يتناسب مع مؤهلك وخبرتك.",
+      "راجع صفحة الجامعة المستضيفة وتأكد من شروط القبول واللغة والموعد النهائي.",
+      "جهز المستندات الأكاديمية والمهنية المطلوبة وفق تعليمات البرنامج.",
+      "اكتب خطاب دوافع مخصصاً للبرنامج الذي اخترته.",
+      "أرسل الطلب مباشرة إلى الجامعة بالطريقة المحددة قبل الموعد النهائي.",
+      "تابع البريد الإلكتروني لمعرفة نتيجة التقييم أو طلب إجراء مقابلة."
+    ],
+    stepsEn: [
+      "Visit the official DAAD EPOS course catalogue and select a suitable programme.",
+      "Review the host university's admission requirements, language criteria and deadline.",
+      "Prepare the required academic and professional documents.",
+      "Write a programme-specific motivation letter.",
+      "Submit the application directly to the host university before its deadline.",
+      "Monitor your email for selection updates or interview invitations."
+    ]
+  },
+  {
+    id: 2,
+    slug: "germany-opportunity-card-chancenkarte",
+    title: "Germany Opportunity Card (Chancenkarte) Job Seeker Residence Permit",
+    titleAr: "بطاقة الفرص الألمانية (Chancenkarte) للإقامة والبحث عن عمل في ألمانيا",
+    type: "migration",
+    categoryEn: "Immigration Pathway",
+    categoryAr: "مسار هجرة وعمل",
+    countryCode: "DE",
+    organization: "Federal Foreign Office & German Federal Government",
+    degreeLevel: "Recognized University Degree or Eligible Vocational Qualification",
+    field: "Skilled Employment and Job Search across German Industries",
+    funding: "Self-funded immigration pathway with permission to work part-time up to 20 hours per week",
+    amount: "€1,091/month financial support benchmark for 2026, subject to accepted proof-of-funds rules",
+    duration: "Up to 12 months initially, subject to applicable extension and residence rules",
+    deadline: null,
+    deadlineType: "rolling",
+    programUrl: "https://www.make-it-in-germany.com/en/visa-residence/types/job-search-opportunity-card",
+    applicationUrl: "https://digital.diplo.de/",
+    featured: true,
+    overviewAr: "تتيح بطاقة الفرص الألمانية (Chancenkarte) للكوادر المؤهلة من خارج الاتحاد الأوروبي فرصة الإقامة في ألمانيا للبحث عن عمل مناسب دون الحاجة إلى عقد عمل مسبق عند التقديم. يوجد مساران للحصول على البطاقة: مسار المؤهل المعترف به بالكامل في ألمانيا، ومسار النقاط الذي يتطلب استيفاء الشروط الأولية والحصول على ست نقاط على الأقل. تسمح البطاقة بالعمل بدوام جزئي لمدة تصل إلى 20 ساعة أسبوعياً، بالإضافة إلى فرص العمل التجريبي القصير وفق القواعد القانونية. يجب على المتقدم إثبات قدرته المالية على تغطية نفقات المعيشة طوال فترة الإقامة.",
+    overviewEn: "The Germany Opportunity Card (Chancenkarte) allows eligible non-EU skilled workers to reside in Germany while searching for qualified employment without requiring a job offer at the time of application. Applicants may qualify through a fully recognized qualification route or a points-based route requiring at least six points and additional eligibility criteria. Holders can work part-time for up to 20 hours per week and undertake permitted trial employment. Applicants must also demonstrate sufficient financial resources for their intended stay.",
+    eligibilityAr: [
+      "امتلاك مؤهل جامعي معترف به بالكامل في ألمانيا، أو مؤهل مهني مؤهل وفق القواعد القانونية.",
+      "في مسار النقاط: امتلاك مؤهل مهني أو جامعي مستوفٍ للشروط الأولية، وتحقيق ست نقاط على الأقل.",
+      "في مسار النقاط: إثبات اللغة الألمانية بمستوى A1 على الأقل أو الإنجليزية بمستوى B2 على الأقل.",
+      "استيفاء متطلبات الاعتراف بالمؤهل المهني، بما في ذلك مدة التدريب المهني المطلوبة إذا كان المتقدم يستخدم هذا المسار.",
+      "إثبات القدرة المالية لتغطية تكاليف المعيشة، وفق المعيار المالي المعمول به وقت التقديم.",
+      "استيفاء بقية شروط التأشيرة والإقامة التي تحددها السفارة الألمانية المختصة."
+    ],
+    eligibilityEn: [
+      "Hold a fully recognized university degree in Germany or another eligible qualification under the applicable legal rules.",
+      "For the points-based route, meet the initial qualification requirements and score at least six points.",
+      "For the points-based route, demonstrate German language proficiency at A1 or English proficiency at B2.",
+      "Meet applicable vocational qualification recognition and training-duration requirements where relevant.",
+      "Provide sufficient financial resources to cover living expenses during the intended stay.",
+      "Meet all additional visa and residence requirements set by the competent German mission."
+    ],
+    benefitsAr: [
+      "الإقامة في ألمانيا لمدة تصل إلى 12 شهراً للبحث عن وظيفة مؤهلة.",
+      "إمكانية العمل بدوام جزئي حتى 20 ساعة أسبوعياً.",
+      "إمكانية العمل التجريبي لمدة تصل إلى أسبوعين لدى صاحب العمل الواحد وفق الضوابط.",
+      "إمكانية التحول إلى تصريح إقامة للعمل عند الحصول على وظيفة مؤهلة واستيفاء الشروط القانونية.",
+      "فرصة التواصل المباشر مع أصحاب العمل وحضور مقابلات العمل داخل ألمانيا."
+    ],
+    benefitsEn: [
+      "Residence in Germany for up to 12 months to search for qualified employment.",
+      "Permission to work part-time for up to 20 hours per week.",
+      "Permission to undertake trial employment for up to two weeks per employer under applicable rules.",
+      "Potential transition to an employment residence permit after securing a qualifying job and meeting legal requirements.",
+      "Opportunity to meet employers and attend job interviews in Germany."
+    ],
+    documentsAr: [
+      "جواز سفر ساري المفعول.",
+      "نموذج طلب التأشيرة والمستندات المطلوبة من السفارة.",
+      "شهادة المؤهل الجامعي أو المهني.",
+      "إثبات الاعتراف بالمؤهل في ألمانيا أو المستندات اللازمة لمسار النقاط.",
+      "شهادة اللغة الألمانية أو الإنجليزية عند التقدم عبر مسار النقاط.",
+      "سيرة ذاتية حديثة وشهادات الخبرة العملية إن وجدت.",
+      "إثبات القدرة المالية عن طريق حساب مغلق أو وسيلة تمويل مقبولة رسمياً.",
+      "إثبات التأمين الصحي المطلوب."
+    ],
+    documentsEn: [
+      "Valid passport.",
+      "Visa application form and documents requested by the German mission.",
+      "University degree or vocational qualification certificate.",
+      "Proof of qualification recognition in Germany or documents required for the points-based route.",
+      "German or English language certificate where required for the points-based route.",
+      "Updated CV and employment certificates where applicable.",
+      "Proof of financial resources through a blocked account or another officially accepted method.",
+      "Required health insurance documentation."
+    ],
+    stepsAr: [
+      "حدد المسار المناسب لك: المؤهل المعترف به بالكامل أو مسار النقاط.",
+      "تحقق من الاعتراف بمؤهلك عبر الجهات وقواعد البيانات الرسمية الألمانية.",
+      "إذا كنت تستخدم مسار النقاط، احسب نقاطك وتأكد من استيفاء الشروط الأولية.",
+      "جهز إثبات القدرة المالية والتأمين الصحي والمستندات المطلوبة.",
+      "قدم طلب التأشيرة عبر بوابة الخدمات القنصلية الألمانية أو السفارة المختصة.",
+      "بعد الحصول على التأشيرة والوصول إلى ألمانيا، أكمل إجراءات تسجيل السكن وابدأ البحث عن وظيفة."
+    ],
+    stepsEn: [
+      "Identify whether you qualify through the recognized qualification route or points-based route.",
+      "Check your qualification recognition using official German databases and authorities.",
+      "If applying through the points route, calculate your score and verify the initial eligibility requirements.",
+      "Arrange proof of financial resources, health insurance and supporting documents.",
+      "Submit your visa application through the German Consular Services Portal or competent German mission.",
+      "After arrival, complete local residence registration and begin your job search."
+    ]
+  },
+      
   /*
   
   {
